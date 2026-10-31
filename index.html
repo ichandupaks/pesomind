@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Pesomind - Premium PH Budget Tracker</title>
+    
+    <!-- PWA Meta Tags for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pesomind">
+    <meta name="theme-color" content="#09090b" id="theme-color-meta">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        peso: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons & Chart.js -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* iOS Glassmorphic Effects & Hide Scrollbars */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .dark .glass {
+            background: rgba(18, 18, 22, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .dark .glass-card {
+            background: rgba(24, 24, 28, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Hide scrollbars for app-like smooth feel */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* iPhone Dynamic Island Simulation Header */
+        .ios-notch {
+            width: 120px;
+            height: 32px;
+            background: #000;
+            border-radius: 20px;
+            margin: 0 auto;
+        }
+        
+        /* Smooth transitions */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* Safe area padding for iPhone 15 notch/home bar */
+        .pb-safe {
+            padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        }
+        .pt-safe {
+            padding-top: max(1rem, env(safe-area-inset-top));
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 min-h-screen font-sans selection:bg-emerald-500 selection:text-white flex flex-col items-center justify-start pb-20">
+
+    <!-- Container restricted to iPhone proportions on desktop, full-width on mobile -->
+    <div id="app" class="w-full max-w-md min-h-screen flex flex-col bg-slate-50 dark:bg-zinc-950 shadow-2xl relative overflow-hidden border-x border-slate-200 dark:border-zinc-800">
+
+        <!-- Top Header & Status Bar -->
+        <header class="sticky top-0 z-40 glass border-b border-slate-200/50 dark:border-zinc-800/50 px-5 pt-safe pb-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-bold shadow-md shadow-emerald-500/20">
+                    ₱
+                </div>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight text-slate-900 dark:text-white leading-none">Pesomind</h1>
+                    <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium tracking-wide uppercase">PH Edition</span>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center space-x-2">
+                <!-- Add to Home Screen Button -->
+                <button onclick="openPwaModal()" class="px-2.5 py-1.5 rounded-full bg-slate-200/60 dark:bg-zinc-800/80 text-xs font-semibold flex items-center space-x-1 hover:bg-slate-300 dark:hover:bg-zinc-700 transition">
+                    <i data-lucide="share" class="w-3.5 h-3.5 text-emerald-500"></i>
+                    <span class="text-slate-700 dark:text-zinc-300">Install</span>
+                </button>
+                
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-slate-200/60 dark:bg-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:scale-105 active:scale-95 transition">
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                    <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic iOS PWA Installation Banner -->
+        <div id="pwaBanner" class="hidden bg-emerald-900/90 text-white px-4 py-2.5 text-xs flex items-center justify-between border-b border-emerald-700 backdrop-blur-md">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                <span>Tap <strong>Share <i data-lucide="share" class="inline w-3 h-3"></i></strong> then <strong>'Add to Home Screen'</strong> for native app mode.</span>
+            </div>
+            <button onclick="closePwaBanner()" class="text-emerald-300 hover:text-white p-1">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- MAIN SCROLLABLE CONTENT AREA -->
+        <main class="flex-1 overflow-y-auto no-scrollbar px-4 pt-4 pb-28 space-y-5">
+
+            <!-- VIEW 1: DASHBOARD / BUDGET -->
+            <section id="view-dashboard" class="space-y-4">
+                
+                <!-- Remaining Money & Net Budget Card -->
+                <div class="relative overflow-hidden rounded-3xl p-6 bg-gradient-to-br from-slate-900 via-zinc-900 to-emerald-950 text-white shadow-xl shadow-emerald-950/20 border border-emerald-500/20">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <p class="text-xs font-medium text-emerald-400/90 tracking-wider uppercase">Remaining Budget</p>
+                            <h2 id="displayRemaining" class="text-3xl font-extrabold tracking-tight mt-0.5 text-white">₱0.00</h2>
+                        </div>
+                        <button onclick="openBudgetModal()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-emerald-400 backdrop-blur-sm transition">
+                            <i data-lucide="sliders" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Progress Gauge Bar -->
+                    <div class="mt-4 space-y-1.5">
+                        <div class="flex justify-between text-xs text-zinc-400">
+                            <span>Spent: <strong id="displaySpent" class="text-zinc-200">₱0</strong></span>
+                            <span>Total: <strong id="displayTotalBudget" class="text-zinc-200">₱0</strong></span>
+                        </div>
+                        <div class="w-full h-2.5 bg-zinc-800/80 rounded-full overflow-hidden p-0.5 border border-white/5">
+                            <div id="budgetProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Safe Spending Allowance -->
+                    <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-1.5 text-zinc-300">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+                            <span>Daily Allowance Gauge:</span>
+                        </div>
+                        <span id="displayDailyAllowance" class="font-bold text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-md border border-amber-400/20">₱0.00 / day</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Grid -->
+                <div class="grid grid-cols-4 gap-2.5">
+                    <button onclick="openTransactionModal('expense')" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-card hover:bg-rose-500/10 hover:border-rose-500/30 transition group">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center mb-1.5 group-hover:scale-110 transition">
+                            <i data-lucide="minus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">Expense</span>
+                    </button>
+
+                    <button onclick="openTransactionModal('income')" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-card hover:bg-emerald-500/10 hover:border-emerald-500/30 transition group">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-1.5 group-hover:scale-110 transition">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">Income</span>
+                    </button>
+
+                    <button onclick="switchTab('utilities')" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-card hover:bg-blue-500/10 hover:border-blue-500/30 transition group">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-1.5 group-hover:scale-110 transition">
+                            <i data-lucide="calculator" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">PH Tools</span>
+                    </button>
+
+                    <button onclick="switchTab('widgets')" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-card hover:bg-purple-500/10 hover:border-purple-500/30 transition group">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center mb-1.5 group-hover:scale-110 transition">
+                            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">Widgets</span>
+                    </button>
+                </div>
+
+                <!-- Spending Analytics Chart Preview -->
+                <div class="p-4 rounded-2xl glass-card space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">Expense Distribution</h3>
+                        <span class="text-[11px] text-emerald-500 font-medium">This Month</span>
+                    </div>
+                    <div class="h-44 w-full relative flex items-center justify-center">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions Feed -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center px-1">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">Recent Transactions</h3>
+                        <button onclick="switchTab('analytics')" class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">View All</button>
+                    </div>
+
+                    <div id="recentTransactionsList" class="space-y-2">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: TRANSACTIONS & ANALYTICS -->
+            <section id="view-analytics" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">Transaction Logs</h2>
+                    <div class="flex space-x-1">
+                        <button onclick="exportData()" class="p-2 rounded-xl bg-slate-200/70 dark:bg-zinc-800 text-xs font-semibold text-slate-700 dark:text-zinc-300 flex items-center space-x-1 hover:bg-slate-300">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search & Filters -->
+                <div class="flex space-x-2">
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" id="searchInput" oninput="renderTransactions()" placeholder="Search transactions (e.g., GCash, Jollibee)..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-200/50 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 dark:text-white">
+                    </div>
+                    <select id="categoryFilter" onchange="renderTransactions()" class="px-3 py-2 text-xs rounded-xl bg-slate-200/50 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 dark:text-white">
+                        <option value="ALL">All Categories</option>
+                        <option value="Food & Dining">Food & Dining</option>
+                        <option value="Utilities & Bills">Utilities & Bills</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Shopping & E-Commerce">Shopping</option>
+                        <option value="Savings & Investments">Savings</option>
+                        <option value="Income">Income</option>
+                    </select>
+                </div>
+
+                <!-- Detailed List -->
+                <div id="fullTransactionsList" class="space-y-2">
+                    <!-- Dynamic rendering -->
+                </div>
+            </section>
+
+            <!-- VIEW 3: PH UTILITIES & SPECIAL SAVINGS -->
+            <section id="view-utilities" class="hidden space-y-4">
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white">PH Financial Utilities</h2>
+
+                <!-- GCash / Maya Fee Recalculator -->
+                <div class="p-4 rounded-2xl glass-card space-y-3">
+                    <div class="flex items-center space-x-2 text-emerald-500 font-bold text-sm">
+                        <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                        <span>E-Wallet Cash-out & Fee Calculator</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-zinc-400">Calculate net received after InstaPay fees (₱15 standard) or GCash cash-out fees (2%).</p>
+                    
+                    <div class="space-y-2">
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-600 dark:text-zinc-400">Amount to Transfer / Cash out (₱)</label>
+                            <input type="number" id="calcAmount" value="1000" oninput="calculateFee()" class="w-full px-3 py-2 text-sm rounded-xl bg-slate-200/50 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-600 dark:text-zinc-400">Fee Type</label>
+                                <select id="feeType" onchange="calculateFee()" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-200/50 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 text-slate-900 dark:text-white outline-none">
+                                    <option value="instapay">InstaPay (₱15 fixed)</option>
+                                    <option value="gcash_cashout">GCash Cash-out (2%)</option>
+                                    <option value="custom">Custom Fee</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-600 dark:text-zinc-400">Calculated Net</label>
+                                <div id="calcResult" class="px-3 py-2 text-sm font-extrabold rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                                    ₱985.00
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13th Month Pay & Bonus Planner -->
+                <div class="p-4 rounded-2xl glass-card space-y-3">
+                    <div class="flex items-center space-x-2 text-amber-500 font-bold text-sm">
+                        <i data-lucide="gift" class="w-4 h-4"></i>
+                        <span>13th Month & Bonus Planner</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-zinc-400">Apply the recommended 50-30-20 PH bonus formula (Savings, Needs, Guilt-free Spending).</p>
+                    
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-600 dark:text-zinc-400">Expected 13th Month Pay (₱)</label>
+                        <input type="number" id="bonusAmount" value="30000" oninput="calculateBonusDistribution()" class="w-full px-3 py-2 text-sm rounded-xl bg-slate-200/50 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+                        <div class="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase block">50% EF / MP2</span>
+                            <span id="bonusSavings" class="text-xs font-bold text-slate-800 dark:text-zinc-100">₱15,000</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                            <span class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold uppercase block">30% Family/Bills</span>
+                            <span id="bonusBills" class="text-xs font-bold text-slate-800 dark:text-zinc-100">₱9,000</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20">
+                            <span class="text-[10px] text-purple-600 dark:text-purple-400 font-semibold uppercase block">20% Gifts/Reward</span>
+                            <span id="bonusLeisure" class="text-xs font-bold text-slate-800 dark:text-zinc-100">₱6,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 50,000 Peso Savings Challenge Track -->
+                <div class="p-4 rounded-2xl glass-card space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2 text-teal-500 font-bold text-sm">
+                            <i data-lucide="piggy-bank" class="w-4 h-4"></i>
+                            <span>₱50,000 Peso Challenge Tracker</span>
+                        </div>
+                        <span id="challengePercent" class="text-xs font-extrabold text-teal-500">24%</span>
+                    </div>
+                    
+                    <div class="w-full h-2 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                        <div id="challengeBar" class="h-full bg-teal-500 rounded-full" style="width: 24%"></div>
+                    </div>
+
+                    <p class="text-xs text-slate-500 dark:text-zinc-400">Progress: <strong id="challengeSaved" class="text-slate-800 dark:text-zinc-200">₱12,000</strong> / ₱50,000</p>
+
+                    <div class="flex space-x-2 pt-1">
+                        <button onclick="addChallengeAmount(500)" class="flex-1 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 text-xs font-semibold border border-teal-500/30">
+                            + ₱500
+                        </button>
+                        <button onclick="addChallengeAmount(1000)" class="flex-1 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 text-xs font-semibold border border-teal-500/30">
+                            + ₱1,000
+                        </button>
+                        <button onclick="resetChallenge()" class="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-500 text-xs font-semibold border border-rose-500/20">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: HOMESCREEN WIDGET SIMULATOR -->
+            <section id="view-widgets" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">iOS Home Screen Widgets</h2>
+                        <p class="text-xs text-slate-500 dark:text-zinc-400">Live preview of Pesomind widget options on your iPhone.</p>
+                    </div>
+                </div>
+
+                <!-- Simulated iOS Small Widget -->
+                <div class="space-y-2">
+                    <span class="text-xs font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Small Widget (2x2)</span>
+                    <div class="w-44 h-44 rounded-[28px] p-4 bg-gradient-to-br from-zinc-900 to-black text-white shadow-2xl border border-zinc-800 flex flex-col justify-between relative overflow-hidden">
+                        <div class="flex justify-between items-center">
+                            <div class="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-xs">₱</div>
+                            <span class="text-[10px] text-zinc-400 font-medium">PESOMIND</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-zinc-400 uppercase tracking-wider">Remaining</span>
+                            <div id="widgetSmallRemaining" class="text-xl font-black text-emerald-400">₱24,150</div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                                <div id="widgetSmallBar" class="bg-emerald-500 h-full" style="width: 65%"></div>
+                            </div>
+                            <div class="flex justify-between text-[9px] text-zinc-400">
+                                <span>Daily Limit</span>
+                                <span id="widgetSmallDaily" class="text-amber-400">₱805/day</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulated iOS Medium Widget -->
+                <div class="space-y-2 pt-2">
+                    <span class="text-xs font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Medium Widget (4x2)</span>
+                    <div class="w-full h-44 rounded-[28px] p-4 bg-gradient-to-br from-zinc-900 via-zinc-900 to-emerald-950 text-white shadow-2xl border border-zinc-800/80 flex justify-between items-center relative overflow-hidden">
+                        <div class="space-y-2 flex-1 pr-4 border-r border-zinc-800">
+                            <div class="flex items-center space-x-1.5">
+                                <div class="w-5 h-5 rounded-md bg-emerald-500 flex items-center justify-center font-bold text-[10px]">₱</div>
+                                <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Pesomind Live</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-zinc-400 uppercase">Available Cash</span>
+                                <div id="widgetMediumRemaining" class="text-2xl font-black text-white">₱24,150.00</div>
+                            </div>
+                            <div class="text-[11px] text-zinc-400">
+                                Days Left: <strong class="text-zinc-200">18 days</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 pl-4 space-y-2">
+                            <div class="text-[11px] font-semibold text-zinc-300">Quick PH Status</div>
+                            <div class="space-y-1 text-[10px]">
+                                <div class="flex justify-between text-zinc-400">
+                                    <span>Food/Grab:</span>
+                                    <span id="widgetFoodTotal" class="text-zinc-200">₱3,200</span>
+                                </div>
+                                <div class="flex justify-between text-zinc-400">
+                                    <span>Bills/Meralco:</span>
+                                    <span id="widgetBillsTotal" class="text-zinc-200">₱4,500</span>
+                                </div>
+                                <div class="flex justify-between text-zinc-400">
+                                    <span>Savings Goal:</span>
+                                    <span class="text-teal-400">₱12,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300">
+                    💡 <strong>Tip:</strong> Added to Home Screen via Safari, PWA widgets update live dynamically inside your browser storage.
+                </div>
+            </section>
+
+        </main>
+
+        <!-- BOTTOM iOS FLOATING GLASS NAVIGATION TAB BAR -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 glass border-t border-slate-200/60 dark:border-zinc-800/80 px-6 py-2 flex justify-around items-center pb-safe">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center text-emerald-500 transition">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium mt-1">Home</span>
+            </button>
+            <button onclick="switchTab('analytics')" id="nav-analytics" class="flex flex-col items-center text-slate-400 dark:text-zinc-500 hover:text-emerald-500 transition">
+                <i data-lucide="receipt" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium mt-1">Logs</span>
+            </button>
+            <button onclick="openTransactionModal('expense')" class="w-12 h-12 -mt-5 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 hover:scale-105 active:scale-95 transition">
+                <i data-lucide="plus" class="w-6 h-6"></i>
+            </button>
+            <button onclick="switchTab('utilities')" id="nav-utilities" class="flex flex-col items-center text-slate-400 dark:text-zinc-500 hover:text-emerald-500 transition">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium mt-1">Tools</span>
+            </button>
+            <button onclick="switchTab('widgets')" id="nav-widgets" class="flex flex-col items-center text-slate-400 dark:text-zinc-500 hover:text-emerald-500 transition">
+                <i data-lucide="app-window" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium mt-1">Widgets</span>
+            </button>
+        </nav>
+
+        <!-- MODAL 1: SET BUDGET MODAL -->
+        <div id="budgetModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-slate-200 dark:border-zinc-800 animate-in slide-in-from-bottom duration-300">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Set Monthly Budget (₱)</h3>
+                    <button onclick="closeBudgetModal()" class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-400">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 dark:text-zinc-400">Total Monthly Allocation</label>
+                    <input type="number" id="inputTotalBudget" placeholder="e.g. 40000" class="w-full mt-1 px-4 py-3 text-lg font-bold rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white border-0 focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+                <button onclick="saveTotalBudget()" class="w-full py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 transition shadow-lg shadow-emerald-500/20">
+                    Save Allocation
+                </button>
+            </div>
+        </div>
+
+        <!-- MODAL 2: ADD TRANSACTION MODAL -->
+        <div id="transactionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-slate-200 dark:border-zinc-800">
+                <div class="flex justify-between items-center">
+                    <h3 id="txModalTitle" class="text-base font-bold text-slate-900 dark:text-white">Log Expense</h3>
+                    <button onclick="closeTransactionModal()" class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-400">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form id="txForm" onsubmit="handleSaveTransaction(event)" class="space-y-3">
+                    <input type="hidden" id="txType" value="expense">
+                    
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-500 dark:text-zinc-400">Amount (₱)</label>
+                        <input type="number" step="0.01" id="txAmount" required placeholder="0.00" class="w-full mt-1 px-4 py-3 text-xl font-black rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white border-0 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-500 dark:text-zinc-400">Title / Merchant</label>
+                        <input type="text" id="txTitle" required placeholder="e.g. GCash, Meralco, Grab, Jollibee" class="w-full mt-1 px-3 py-2 text-sm rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white border-0 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-500 dark:text-zinc-400">Category</label>
+                            <select id="txCategory" class="w-full mt-1 px-3 py-2 text-xs rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white border-0 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Utilities & Bills">Utilities & Bills</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Shopping & E-Commerce">Shopping & E-Commerce</option>
+                                <option value="Savings & Investments">Savings & Investments</option>
+                                <option value="Income">Income / Salary</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-500 dark:text-zinc-400">Payment Method</label>
+                            <select id="txMethod" class="w-full mt-1 px-3 py-2 text-xs rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white border-0 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <option value="GCash">GCash</option>
+                                <option value="Maya">Maya</option>
+                                <option value="BPI">BPI Bank</option>
+                                <option value="BDO">BDO Bank</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Credit Card">Credit Card</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 mt-2 rounded-2xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 transition shadow-lg shadow-emerald-500/20">
+                        Save Transaction
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL 3: PWA INSTALLATION GUIDE MODAL -->
+        <div id="pwaModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-slate-200 dark:border-zinc-800">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Install on iPhone 15</h3>
+                    <button onclick="closePwaModal()" class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-400">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-3 text-xs text-slate-600 dark:text-zinc-300">
+                    <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-100 dark:bg-zinc-800">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">1</span>
+                        <p>Open this page in <strong>Safari</strong> on your iPhone 15.</p>
+                    </div>
+                    <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-100 dark:bg-zinc-800">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">2</span>
+                        <p>Tap the <strong>Share</strong> icon <i data-lucide="share" class="inline w-3.5 h-3.5 text-emerald-500"></i> at the bottom toolbar.</p>
+                    </div>
+                    <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-100 dark:bg-zinc-800">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">3</span>
+                        <p>Scroll down and select <strong>'Add to Home Screen'</strong>.</p>
+                    </div>
+                </div>
+
+                <button onclick="closePwaModal()" class="w-full py-3 rounded-2xl bg-slate-200 dark:bg-zinc-800 text-slate-800 dark:text-zinc-100 font-bold text-sm">
+                    Got it
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- APPLICATION JAVASCRIPT -->
+    <script>
+        // State Initialization with local storage fallback
+        let appState = {
+            totalBudget: parseFloat(localStorage.getItem('pesomind_budget')) || 40000,
+            challengeSaved: parseFloat(localStorage.getItem('pesomind_challenge')) || 12000,
+            transactions: JSON.parse(localStorage.getItem('pesomind_transactions')) || [
+                { id: '1', title: 'GCash - Meralco Bill', amount: 4500, type: 'expense', category: 'Utilities & Bills', method: 'GCash', date: new Date().toISOString() },
+                { id: '2', title: 'Jollibee Family Meal', amount: 850, type: 'expense', category: 'Food & Dining', method: 'Cash', date: new Date().toISOString() },
+                { id: '3', title: 'Grab Car to Office', amount: 420, type: 'expense', category: 'Transportation', method: 'Maya', date: new Date().toISOString() },
+                { id: '4', title: 'PAG-IBIG MP2 Deposit', amount: 5000, type: 'expense', category: 'Savings & Investments', method: 'BPI', date: new Date().toISOString() },
+                { id: '5', title: 'Bi-Weekly Salary Input', amount: 25000, type: 'income', category: 'Income', method: 'BPI', date: new Date().toISOString() }
+            ]
+        };
+
+        let expenseChart = null;
+
+        // On Page Load
+        window.onload = function() {
+            lucide.createIcons();
+            initChart();
+            renderDashboard();
+            calculateFee();
+            calculateBonusDistribution();
+            
+            // Check iOS Standalone mode
+            if (window.navigator.standalone) {
+                document.getElementById('pwaBanner').classList.add('hidden');
+            } else {
+                document.getElementById('pwaBanner').classList.remove('hidden');
+            }
+        };
+
+        // Dark / Light Mode Toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const metaColor = document.getElementById('theme-color-meta');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                metaColor.setAttribute('content', '#f8fafc');
+            } else {
+                html.classList.add('dark');
+                metaColor.setAttribute('content', '#09090b');
+            }
+            if (expenseChart) updateChartColors();
+        }
+
+        // Navigation Switcher
+        function switchTab(tabId) {
+            ['dashboard', 'analytics', 'utilities', 'widgets'].forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if (view) view.classList.add('hidden');
+                if (nav) {
+                    nav.classList.remove('text-emerald-500');
+                    nav.classList.add('text-slate-400', 'dark:text-zinc-500');
+                }
+            });
+
+            const targetView = document.getElementById(`view-${tabId}`);
+            const targetNav = document.getElementById(`nav-${tabId}`);
+            if (targetView) targetView.classList.remove('hidden');
+            if (targetNav) {
+                targetNav.classList.add('text-emerald-500');
+                targetNav.classList.remove('text-slate-400', 'dark:text-zinc-500');
+            }
+
+            if (tabId === 'analytics') renderTransactions();
+        }
+
+        // Render Dashboard Calculations
+        function renderDashboard() {
+            const totalSpent = appState.transactions
+                .filter(t => t.type === 'expense')
+                .reduce((acc, t) => acc + t.amount, 0);
+
+            const totalIncome = appState.transactions
+                .filter(t => t.type === 'income')
+                .reduce((acc, t) => acc + t.amount, 0);
+
+            const netBudget = appState.totalBudget + totalIncome;
+            const remaining = netBudget - totalSpent;
+
+            // Update UI elements
+            document.getElementById('displayRemaining').innerText = formatPHP(remaining);
+            document.getElementById('displaySpent').innerText = formatPHP(totalSpent);
+            document.getElementById('displayTotalBudget').innerText = formatPHP(netBudget);
+
+            // Calculate progress bar
+            const percentSpent = Math.min(100, Math.max(0, (totalSpent / (netBudget || 1)) * 100));
+            document.getElementById('budgetProgressBar').style.width = `${percentSpent}%`;
+
+            // Calculate Daily Recommended Allowance based on days remaining in month
+            const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+            const daysRemaining = Math.max(1, daysInMonth - today.getDate() + 1);
+            const dailyAllowance = Math.max(0, remaining / daysRemaining);
+
+            document.getElementById('displayDailyAllowance').innerText = `${formatPHP(dailyAllowance)} / day`;
+
+            // Render Recent Transactions (Top 4)
+            const recentList = document.getElementById('recentTransactionsList');
+            recentList.innerHTML = '';
+            
+            appState.transactions.slice(0, 4).forEach(tx => {
+                recentList.appendChild(createTransactionCard(tx));
+            });
+
+            // Update Widgets Simulator Values
+            document.getElementById('widgetSmallRemaining').innerText = formatPHP(remaining, true);
+            document.getElementById('widgetSmallDaily').innerText = `${formatPHP(dailyAllowance, true)}/day`;
+            document.getElementById('widgetSmallBar').style.width = `${100 - percentSpent}%`;
+            document.getElementById('widgetMediumRemaining').innerText = formatPHP(remaining);
+
+            const foodTotal = appState.transactions.filter(t => t.category === 'Food & Dining').reduce((acc, t) => acc + t.amount, 0);
+            const billsTotal = appState.transactions.filter(t => t.category === 'Utilities & Bills').reduce((acc, t) => acc + t.amount, 0);
+            document.getElementById('widgetFoodTotal').innerText = formatPHP(foodTotal, true);
+            document.getElementById('widgetBillsTotal').innerText = formatPHP(billsTotal, true);
+
+            // Update Chart Data
+            updateChartData();
+        }
+
+        // Render Transaction Item HTML Component
+        function createTransactionCard(tx) {
+            const div = document.createElement('div');
+            div.className = 'p-3 rounded-2xl glass-card flex items-center justify-between';
+
+            const isExpense = tx.type === 'expense';
+            const iconName = getCategoryIcon(tx.category);
+
+            div.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl ${isExpense ? 'bg-rose-500/10 text-rose-500' : 'bg-emerald-500/10 text-emerald-500'} flex items-center justify-center shrink-0">
+                        <i data-lucide="${iconName}" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800 dark:text-zinc-100">${tx.title}</h4>
+                        <div class="flex items-center space-x-2 text-[10px] text-slate-400 dark:text-zinc-400">
+                            <span>${tx.category}</span>
+                            <span>•</span>
+                            <span class="px-1.5 py-0.5 rounded-md bg-slate-200/60 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300">${tx.method}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-extrabold ${isExpense ? 'text-slate-900 dark:text-white' : 'text-emerald-500'}">
+                        ${isExpense ? '-' : '+'}${formatPHP(tx.amount)}
+                    </span>
+                    <button onclick="deleteTransaction('${tx.id}')" class="block text-[10px] text-rose-400 hover:text-rose-600 ml-auto mt-0.5">Delete</button>
+                </div>
+            `;
+            setTimeout(() => lucide.createIcons(), 0);
+            return div;
+        }
+
+        // Render Detailed Transactions List with Filter
+        function renderTransactions() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filter = document.getElementById('categoryFilter').value;
+            const container = document.getElementById('fullTransactionsList');
+            container.innerHTML = '';
+
+            const filtered = appState.transactions.filter(t => {
+                const matchesSearch = t.title.toLowerCase().includes(query) || t.method.toLowerCase().includes(query);
+                const matchesCategory = filter === 'ALL' || t.category === filter;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">No transactions found.</p>`;
+                return;
+            }
+
+            filtered.forEach(tx => container.appendChild(createTransactionCard(tx)));
+        }
+
+        // Add Transaction Handler
+        function handleSaveTransaction(e) {
+            e.preventDefault();
+            const type = document.getElementById('txType').value;
+            const amount = parseFloat(document.getElementById('txAmount').value);
+            const title = document.getElementById('txTitle').value;
+            const category = document.getElementById('txCategory').value;
+            const method = document.getElementById('txMethod').value;
+
+            if (!amount || !title) return;
+
+            const newTx = {
+                id: Date.now().toString(),
+                title,
+                amount,
+                type,
+                category,
+                method,
+                date: new Date().toISOString()
+            };
+
+            appState.transactions.unshift(newTx);
+            saveState();
+            closeTransactionModal();
+            renderDashboard();
+        }
+
+        function deleteTransaction(id) {
+            appState.transactions = appState.transactions.filter(t => t.id !== id);
+            saveState();
+            renderDashboard();
+            if (!document.getElementById('view-analytics').classList.contains('hidden')) {
+                renderTransactions();
+            }
+        }
+
+        // Save State to Local Storage
+        function saveState() {
+            localStorage.setItem('pesomind_budget', appState.totalBudget);
+            localStorage.setItem('pesomind_challenge', appState.challengeSaved);
+            localStorage.setItem('pesomind_transactions', JSON.stringify(appState.transactions));
+        }
+
+        // PH E-Wallet Fee Calculator
+        function calculateFee() {
+            const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
+            const type = document.getElementById('feeType').value;
+            let fee = 0;
+
+            if (type === 'instapay') fee = 15;
+            else if (type === 'gcash_cashout') fee = amount * 0.02;
+
+            const net = Math.max(0, amount - fee);
+            document.getElementById('calcResult').innerText = formatPHP(net);
+        }
+
+        // 13th Month Pay Distribution
+        function calculateBonusDistribution() {
+            const bonus = parseFloat(document.getElementById('bonusAmount').value) || 0;
+            document.getElementById('bonusSavings').innerText = formatPHP(bonus * 0.5);
+            document.getElementById('bonusBills').innerText = formatPHP(bonus * 0.3);
+            document.getElementById('bonusLeisure').innerText = formatPHP(bonus * 0.2);
+        }
+
+        // Peso Challenge Tracker
+        function addChallengeAmount(val) {
+            appState.challengeSaved = Math.min(50000, appState.challengeSaved + val);
+            saveState();
+            updateChallengeUI();
+        }
+
+        function resetChallenge() {
+            appState.challengeSaved = 0;
+            saveState();
+            updateChallengeUI();
+        }
+
+        function updateChallengeUI() {
+            const saved = appState.challengeSaved;
+            const pct = Math.round((saved / 50000) * 100);
+            document.getElementById('challengePercent').innerText = `${pct}%`;
+            document.getElementById('challengeBar').style.width = `${pct}%`;
+            document.getElementById('challengeSaved').innerText = formatPHP(saved);
+        }
+
+        // Helper: Formatting PHP Currency
+        function formatPHP(amount, compact = false) {
+            if (compact && amount >= 1000) {
+                return '₱' + (amount / 1000).toFixed(1) + 'k';
+            }
+            return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amount);
+        }
+
+        function getCategoryIcon(cat) {
+            switch (cat) {
+                case 'Food & Dining': return 'utensils';
+                case 'Utilities & Bills': return 'zap';
+                case 'Transportation': return 'car';
+                case 'Shopping & E-Commerce': return 'shopping-bag';
+                case 'Savings & Investments': return 'shield-check';
+                default: return 'arrow-down-right';
+            }
+        }
+
+        // Update chart text color when switching themes
+        function updateChartColors() {
+            if (!expenseChart) return;
+            const isDark = document.documentElement.classList.contains('dark');
+            expenseChart.options.plugins.legend.labels.color = isDark ? '#e4e4e7' : '#334155';
+            expenseChart.update();
+        }
+
+        // Modal Handlers & Controls
+        function openPwaModal() {
+            document.getElementById('pwaModal').classList.remove('hidden');
+        }
+        function closePwaModal() {
+            document.getElementById('pwaModal').classList.add('hidden');
+        }
+        function closePwaBanner() {
+            document.getElementById('pwaBanner').classList.add('hidden');
+        }
+        function openBudgetModal() {
+            document.getElementById('inputTotalBudget').value = appState.totalBudget;
+            document.getElementById('budgetModal').classList.remove('hidden');
+        }
+        function closeBudgetModal() {
+            document.getElementById('budgetModal').classList.add('hidden');
+        }
+        function saveTotalBudget() {
+            const val = parseFloat(document.getElementById('inputTotalBudget').value);
+            if (val && val > 0) {
+                appState.totalBudget = val;
+                saveState();
+                renderDashboard();
+                closeBudgetModal();
+            }
+        }
+        function openTransactionModal(type = 'expense') {
+            document.getElementById('txType').value = type;
+            document.getElementById('txModalTitle').innerText = type === 'expense' ? 'Log Expense' : 'Log Income';
+            document.getElementById('txForm').reset();
+            document.getElementById('txType').value = type;
+            if (type === 'income') {
+                document.getElementById('txCategory').value = 'Income';
+            } else {
+                document.getElementById('txCategory').value = 'Food & Dining';
+            }
+            document.getElementById('transactionModal').classList.remove('hidden');
+        }
+        function closeTransactionModal() {
+            document.getElementById('transactionModal').classList.add('hidden');
+        }
+
+        // Export Data Feature
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "pesomind_backup.json");
+            document.body.appendChild(dlAnchorElem);
+            dlAnchorElem.click();
+            dlAnchorElem.remove();
+        }
+
+        // Chart Initialization
+        function initChart() {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const isDark = document.documentElement.classList.contains('dark');
+            expenseChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Food', 'Bills', 'Transport', 'Shopping', 'Savings'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#14b8a6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { 
+                                boxWidth: 10, 
+                                font: { size: 10 },
+                                color: isDark ? '#e4e4e7' : '#334155'
+                            } 
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function updateChartData() {
+            if (!expenseChart) return;
+            const categories = ['Food & Dining', 'Utilities & Bills', 'Transportation', 'Shopping & E-Commerce', 'Savings & Investments'];
+            const data = categories.map(cat => {
+                return appState.transactions
+                    .filter(t => t.type === 'expense' && t.category === cat)
+                    .reduce((acc, t) => acc + t.amount, 0);
+            });
+
+            expenseChart.data.datasets[0].data = data;
+            expenseChart.update();
+        }
+    </script>
+</body>
+</html>
