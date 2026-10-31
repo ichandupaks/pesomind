@@ -19,20 +19,19 @@
             theme: {
                 extend: {
                     colors: {
-                        peso: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#10b981',
-                            600: '#059669',
-                            900: '#064e3b',
+                        navy: {
+                            50: '#f0f4f9',
+                            100: '#d9e2ec',
+                            500: '#2b6cb0',
+                            600: '#1d4ed8',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#0a1224'
                         },
-                        luxe: {
-                            emerald: '#10b981',
-                            jade: '#059669',
-                            mint: '#34d399',
-                            dark: '#03120e',
-                            rose: '#f43f5e',
-                            amber: '#f59e0b'
+                        sapphire: {
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7'
                         }
                     },
                     fontFamily: {
@@ -48,32 +47,32 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Base Liquid Glass Theme */
+        /* Eye-Friendly Glass Theme (Navy Blue & Slate Ambient) */
         .glass {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .dark .glass {
-            background: rgba(4, 20, 15, 0.88);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(10, 18, 36, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        /* Universal Liquid Glass Container Styling for All Sections */
+        /* Navy & Slate Glass Cards */
         .liquid-glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(236, 253, 245, 0.45));
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            box-shadow: 0 14px 30px rgba(16, 185, 129, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(240, 244, 249, 0.85));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(14, 165, 233, 0.18);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04), inset 0 1px 1px rgba(255, 255, 255, 1);
         }
         .dark .liquid-glass-card {
-            background: linear-gradient(135deg, rgba(12, 35, 27, 0.75), rgba(4, 20, 15, 0.85));
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(52, 211, 153, 0.18);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(10, 18, 36, 0.9));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.06);
         }
 
         /* Hide scrollbars completely while preserving full scrollability */
@@ -95,7 +94,7 @@
             scrollbar-width: none;
         }
 
-        /* Dynamic Liquid Canvas */
+        /* Dynamic Liquid Canvas - Soft Ambient Blend */
         #liquidCanvas {
             position: absolute;
             top: 0;
@@ -105,13 +104,13 @@
             pointer-events: none;
             z-index: 0;
             border-radius: 1.5rem;
-            opacity: 0.95;
+            opacity: 0.75;
         }
         
         /* Smooth transitions */
         * {
             -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease;
         }
 
         /* Safe area padding for iPhone 15 notch/home bar */
@@ -123,67 +122,67 @@
         }
     </style>
 </head>
-<body class="bg-emerald-50/50 dark:bg-[#020d09] text-slate-800 dark:text-emerald-50 min-h-screen font-sans selection:bg-emerald-500 selection:text-white flex flex-col items-center justify-start pb-20">
+<body class="bg-[#eef2f7] dark:bg-[#060b17] text-slate-700 dark:text-sky-100/90 min-h-screen font-sans selection:bg-sky-500 selection:text-white flex flex-col items-center justify-start pb-20">
 
     <!-- Container restricted to iPhone proportions on desktop, full-width on mobile -->
-    <div id="app" class="w-full max-w-md min-h-screen flex flex-col bg-emerald-50/20 dark:bg-[#03120e] shadow-2xl relative overflow-hidden border-x border-emerald-500/20 dark:border-emerald-900/40">
+    <div id="app" class="w-full max-w-md min-h-screen flex flex-col bg-[#f4f7fb] dark:bg-[#0a1224] shadow-2xl relative overflow-hidden border-x border-sky-500/10 dark:border-sky-950/60">
 
         <!-- Top Header & Status Bar -->
-        <header class="sticky top-0 z-40 glass border-b border-emerald-500/20 dark:border-emerald-900/50 px-5 pt-safe pb-3 flex justify-between items-center">
+        <header class="sticky top-0 z-40 glass border-b border-sky-500/10 dark:border-sky-900/30 px-5 pt-safe pb-3 flex justify-between items-center">
             <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-mint-400 flex items-center justify-center text-white font-black shadow-lg shadow-emerald-500/30">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 flex items-center justify-center text-white font-black shadow-md shadow-sky-600/20">
                     ₱
                 </div>
                 <div>
-                    <h1 class="text-lg font-black tracking-tight bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-400 dark:from-emerald-300 dark:via-mint-400 dark:to-teal-200 bg-clip-text text-transparent leading-none">Pesomind</h1>
+                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-blue-800 via-sky-600 to-cyan-600 dark:from-sky-300 dark:via-blue-300 dark:to-cyan-200 bg-clip-text text-transparent leading-none">Pesomind</h1>
                 </div>
             </div>
 
             <!-- Header Action Controls -->
             <div class="flex items-center space-x-2">
                 <!-- Dark Mode Toggle -->
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-emerald-100/70 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 hover:scale-105 active:scale-95 transition border border-emerald-300/40 dark:border-emerald-500/30">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-emerald-300"></i>
-                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-emerald-800"></i>
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-sky-100/60 dark:bg-sky-900/40 text-sky-800 dark:text-sky-300 hover:scale-105 active:scale-95 transition border border-sky-200/50 dark:border-sky-800/40">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-sky-300"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-sky-800"></i>
                 </button>
             </div>
         </header>
 
         <!-- Dynamic iOS PWA Installation Banner -->
-        <div id="pwaBanner" class="hidden bg-gradient-to-r from-emerald-950 via-teal-950 to-emerald-950 text-white px-4 py-2.5 text-xs flex items-center justify-between border-b border-emerald-500/30 backdrop-blur-md">
+        <div id="pwaBanner" class="hidden bg-slate-900 dark:bg-slate-950 text-slate-200 px-4 py-2.5 text-xs flex items-center justify-between border-b border-sky-500/20 backdrop-blur-md">
             <div class="flex items-center space-x-2">
-                <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                <i data-lucide="smartphone" class="w-4 h-4 text-sky-400 shrink-0"></i>
                 <span>Tap <strong>Share <i data-lucide="share" class="inline w-3 h-3"></i></strong> then <strong>'Add to Home Screen'</strong> for native app mode.</span>
             </div>
-            <button onclick="closePwaBanner()" class="text-emerald-300 hover:text-white p-1">
+            <button onclick="closePwaBanner()" class="text-slate-400 hover:text-white p-1">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
         <!-- MAIN SCROLLABLE CONTENT AREA -->
-        <main class="flex-1 overflow-y-auto no-scrollbar px-4 pt-4 pb-28 space-y-6">
+        <main class="flex-1 overflow-y-auto no-scrollbar px-4 pt-4 pb-28 space-y-5">
 
             <!-- VIEW 1: DASHBOARD / BUDGET -->
-            <section id="view-dashboard" class="space-y-5">
+            <section id="view-dashboard" class="space-y-4">
                 
                 <!-- 1. REMAINING BUDGET SECTION -->
-                <div class="relative overflow-hidden rounded-3xl p-6 liquid-glass-card text-white">
+                <div class="relative overflow-hidden rounded-3xl p-6 liquid-glass-card text-slate-800 dark:text-sky-50">
                     <canvas id="liquidCanvas"></canvas>
                     
                     <div class="relative z-10 flex justify-between items-start mb-2">
                         <div>
-                            <p class="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <p class="text-[11px] font-bold text-sky-700 dark:text-sky-400 tracking-wider uppercase flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
                                 Remaining Budget
                             </p>
-                            <h2 id="displayRemaining" class="text-4xl font-black tracking-tight mt-1 text-slate-900 dark:text-white drop-shadow-md">₱0.00</h2>
+                            <h2 id="displayRemaining" class="text-4xl font-extrabold tracking-tight mt-1 text-slate-900 dark:text-white">₱0.00</h2>
                         </div>
                         <div class="flex items-center space-x-1.5">
                             <!-- Archive & Reset Action Trigger -->
-                            <button onclick="openArchiveOptionsModal()" title="Archive & Reset Options" class="p-2.5 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 hover:bg-amber-500/25 backdrop-blur-md border border-amber-500/20 transition active:scale-95">
+                            <button onclick="openArchiveOptionsModal()" title="Archive & Reset Options" class="p-2.5 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 backdrop-blur-md border border-amber-500/20 transition active:scale-95">
                                 <i data-lucide="archive-restore" class="w-5 h-5"></i>
                             </button>
-                            <button onclick="openBudgetModal()" title="Set Budget" class="p-2.5 rounded-xl bg-emerald-500/15 dark:bg-white/10 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 backdrop-blur-md border border-emerald-500/20 dark:border-white/20 transition active:scale-95">
+                            <button onclick="openBudgetModal()" title="Set Budget" class="p-2.5 rounded-xl bg-sky-500/10 dark:bg-white/5 hover:bg-sky-500/20 text-sky-800 dark:text-sky-300 backdrop-blur-md border border-sky-500/20 dark:border-white/10 transition active:scale-95">
                                 <i data-lucide="sliders" class="w-5 h-5"></i>
                             </button>
                         </div>
@@ -191,95 +190,95 @@
 
                     <!-- Progress Gauge Bar -->
                     <div class="relative z-10 mt-5 space-y-2">
-                        <div class="flex justify-between text-xs font-bold text-slate-700 dark:text-emerald-200">
-                            <span>Spent: <strong id="displaySpent" class="text-rose-500 dark:text-rose-400 font-black">₱0</strong></span>
-                            <span>Total: <strong id="displayTotalBudget" class="text-slate-900 dark:text-white font-black">₱0</strong></span>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 dark:text-sky-200/80">
+                            <span>Spent: <strong id="displaySpent" class="text-rose-600 dark:text-rose-400 font-bold">₱0</strong></span>
+                            <span>Total: <strong id="displayTotalBudget" class="text-slate-800 dark:text-white font-bold">₱0</strong></span>
                         </div>
-                        <div class="w-full h-3 bg-emerald-950/10 dark:bg-black/50 rounded-full overflow-hidden p-0.5 border border-emerald-500/20">
-                            <div id="budgetProgressBar" class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-300 rounded-full transition-all duration-500 shadow-sm" style="width: 0%"></div>
+                        <div class="w-full h-2.5 bg-slate-200/70 dark:bg-black/40 rounded-full overflow-hidden p-0.5 border border-sky-500/10">
+                            <div id="budgetProgressBar" class="h-full bg-sky-500 rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
 
                     <!-- Daily Safe Spending Allowance -->
-                    <div class="relative z-10 mt-4 pt-3 border-t border-emerald-900/10 dark:border-white/10 flex items-center justify-between text-xs">
-                        <div class="flex items-center space-x-1.5 text-slate-700 dark:text-emerald-200 font-bold">
-                            <i data-lucide="zap" class="w-4 h-4 text-emerald-500 dark:text-emerald-400"></i>
+                    <div class="relative z-10 mt-4 pt-3 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-1.5 text-slate-600 dark:text-sky-200/90 font-medium">
+                            <i data-lucide="zap" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
                             <span>Daily Allowance:</span>
                         </div>
-                        <span id="displayDailyAllowance" class="font-black text-emerald-800 dark:text-emerald-300 bg-emerald-500/15 dark:bg-emerald-400/10 px-3 py-1 rounded-xl border border-emerald-500/30">₱0.00 / day</span>
+                        <span id="displayDailyAllowance" class="font-bold text-sky-800 dark:text-sky-300 bg-sky-500/10 dark:bg-sky-400/10 px-3 py-1 rounded-xl border border-sky-500/20">₱0.00 / day</span>
                     </div>
                 </div>
 
-                <!-- NEW: PERIODIC SPENDING BREAKDOWN (Today / This Week / This Month) -->
+                <!-- 2. PERIODIC SPENDING BREAKDOWN (Today / This Week / This Month) -->
                 <div class="p-4 rounded-3xl liquid-glass-card space-y-3">
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5 border-b border-emerald-500/10 dark:border-emerald-500/20 pb-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-400 flex items-center gap-1.5 border-b border-slate-200/50 dark:border-sky-500/15 pb-2">
                         <i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i>
                         Spending Summary
                     </h3>
                     <div class="grid grid-cols-3 gap-2">
                         <!-- Today -->
-                        <div class="p-3 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-center">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-emerald-400/80 block">Today</span>
-                            <span id="spentToday" class="text-xs font-black text-rose-500 dark:text-rose-400 mt-0.5 block">₱0.00</span>
+                        <div class="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/30 border border-sky-500/15 text-center">
+                            <span class="text-[10px] font-semibold text-slate-500 dark:text-sky-400/70 block">Today</span>
+                            <span id="spentToday" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
                         </div>
-                        <!-- This Week -->
-                        <div class="p-3 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-center">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-emerald-400/80 block">This Week</span>
-                            <span id="spentWeek" class="text-xs font-black text-rose-500 dark:text-rose-400 mt-0.5 block">₱0.00</span>
+                        <!-- This Week (Mon 12AM - Sun 11:59PM) -->
+                        <div class="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/30 border border-sky-500/15 text-center">
+                            <span class="text-[10px] font-semibold text-slate-500 dark:text-sky-400/70 block">This Week</span>
+                            <span id="spentWeek" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
                         </div>
-                        <!-- This Month -->
-                        <div class="p-3 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-center">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-emerald-400/80 block">This Month</span>
-                            <span id="spentMonth" class="text-xs font-black text-rose-500 dark:text-rose-400 mt-0.5 block">₱0.00</span>
+                        <!-- This Month (1st - 30th/31st) -->
+                        <div class="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/30 border border-sky-500/15 text-center">
+                            <span class="text-[10px] font-semibold text-slate-500 dark:text-sky-400/70 block">This Month</span>
+                            <span id="spentMonth" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. QUICK ACTIONS SECTION -->
+                <!-- 3. QUICK ACTIONS SECTION -->
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="openTransactionModal('expense')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-rose-500/10 transition group active:scale-95">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-500 flex items-center justify-center group-hover:scale-110 transition shrink-0 border border-rose-500/20">
-                            <i data-lucide="minus-circle" class="w-6 h-6"></i>
+                    <button onclick="openTransactionModal('expense')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-rose-500/5 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center transition shrink-0 border border-rose-500/20">
+                            <i data-lucide="minus-circle" class="w-5 h-5"></i>
                         </div>
                         <div class="text-left">
-                            <span class="text-xs font-black text-slate-900 dark:text-white block">Log Expense</span>
-                            <span class="text-[10px] font-semibold text-slate-500 dark:text-emerald-400/70">Add spending</span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-white block">Log Expense</span>
+                            <span class="text-[10px] font-medium text-slate-500 dark:text-sky-400/70">Add spending</span>
                         </div>
                     </button>
 
-                    <button onclick="openTransactionModal('income')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-emerald-500/10 transition group active:scale-95">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition shrink-0 border border-emerald-500/20">
-                            <i data-lucide="plus-circle" class="w-6 h-6"></i>
+                    <button onclick="openTransactionModal('income')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-sky-500/5 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center transition shrink-0 border border-sky-500/20">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
                         </div>
                         <div class="text-left">
-                            <span class="text-xs font-black text-slate-900 dark:text-white block">Add Income</span>
-                            <span class="text-[10px] font-semibold text-slate-500 dark:text-emerald-400/70">Add salary/cash</span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-white block">Add Income</span>
+                            <span class="text-[10px] font-medium text-slate-500 dark:text-sky-400/70">Add salary/cash</span>
                         </div>
                     </button>
                 </div>
 
-                <!-- 3. SPENDING DISTRIBUTION SECTION -->
+                <!-- 4. SPENDING DISTRIBUTION SECTION -->
                 <div class="p-5 rounded-3xl liquid-glass-card space-y-4">
-                    <div class="flex justify-between items-center border-b border-emerald-500/10 dark:border-emerald-500/20 pb-2.5">
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                    <div class="flex justify-between items-center border-b border-slate-200/50 dark:border-sky-500/15 pb-2.5">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-400 flex items-center gap-1.5">
                             <i data-lucide="pie-chart" class="w-4 h-4"></i>
                             Expense Distribution
                         </h3>
-                        <span class="text-[11px] text-emerald-600 dark:text-emerald-300 font-extrabold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">Current Cycle</span>
+                        <span class="text-[11px] text-sky-700 dark:text-sky-300 font-semibold bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/15">Current Cycle</span>
                     </div>
                     <div class="h-44 w-full relative flex items-center justify-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
 
-                <!-- 4. RECENT TRANSACTIONS SECTION -->
+                <!-- 5. RECENT TRANSACTIONS SECTION -->
                 <div class="space-y-3">
                     <div class="flex justify-between items-center px-1">
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-400 flex items-center gap-1.5">
                             <i data-lucide="history" class="w-4 h-4"></i>
                             Recent Active Logs
                         </h3>
-                        <button onclick="switchTab('analytics')" class="text-xs text-emerald-700 dark:text-emerald-400 font-black hover:underline">View All Logs</button>
+                        <button onclick="switchTab('analytics')" class="text-xs text-sky-700 dark:text-sky-400 font-bold hover:underline">View All Logs</button>
                     </div>
 
                     <div id="recentTransactionsList" class="space-y-2.5">
@@ -291,9 +290,9 @@
             <!-- VIEW 2: TRANSACTIONS & ANALYTICS -->
             <section id="view-analytics" class="hidden space-y-4">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-black text-slate-900 dark:text-white">Transaction Logs & Archives</h2>
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white">Transaction Logs & Archives</h2>
                     <div class="flex space-x-1">
-                        <button onclick="exportData()" class="p-2 rounded-xl bg-emerald-100/80 dark:bg-emerald-950 text-xs font-extrabold text-emerald-800 dark:text-emerald-300 flex items-center space-x-1 hover:bg-emerald-200 border border-emerald-300/40 dark:border-emerald-500/30 active:scale-95">
+                        <button onclick="exportData()" class="p-2 rounded-xl bg-sky-100/60 dark:bg-sky-950/70 text-xs font-bold text-sky-800 dark:text-sky-300 flex items-center space-x-1 hover:bg-sky-200 border border-sky-300/30 dark:border-sky-800/40 active:scale-95">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                             <span>Export</span>
                         </button>
@@ -303,10 +302,10 @@
                 <!-- Search & Filters -->
                 <div class="flex space-x-2">
                     <div class="relative flex-1">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-emerald-600/50 dark:text-emerald-400/50"></i>
-                        <input type="text" id="searchInput" oninput="renderTransactions()" placeholder="Search logs or dates..." class="w-full pl-9 pr-3 py-2.5 text-xs font-medium rounded-xl bg-white/70 dark:bg-emerald-950/60 border border-emerald-300/40 dark:border-emerald-800/60 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 dark:text-white">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400 dark:text-sky-400/50"></i>
+                        <input type="text" id="searchInput" oninput="renderTransactions()" placeholder="Search logs, times, or dates..." class="w-full pl-9 pr-3 py-2.5 text-xs font-medium rounded-xl bg-white/80 dark:bg-sky-950/50 border border-slate-200 dark:border-sky-900/50 focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-slate-800 dark:text-white">
                     </div>
-                    <select id="categoryFilter" onchange="renderTransactions()" class="px-3 py-2.5 text-xs font-semibold rounded-xl bg-white/70 dark:bg-emerald-950/60 border border-emerald-300/40 dark:border-emerald-800/60 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 dark:text-white">
+                    <select id="categoryFilter" onchange="renderTransactions()" class="px-3 py-2.5 text-xs font-semibold rounded-xl bg-white/80 dark:bg-sky-950/50 border border-slate-200 dark:border-sky-900/50 focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-slate-800 dark:text-white">
                         <option value="ALL">All Categories</option>
                         <option value="Food & Dining">Food & Dining</option>
                         <option value="Utilities & Bills">Utilities & Bills</option>
@@ -327,20 +326,20 @@
         </main>
 
         <!-- BOTTOM iOS FLOATING GLASS NAVIGATION TAB BAR -->
-        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 glass border-t border-emerald-500/20 dark:border-emerald-900/60 px-8 py-3 flex justify-between items-center pb-safe">
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 glass border-t border-sky-500/10 dark:border-sky-900/40 px-8 py-3 flex justify-between items-center pb-safe">
             <!-- Home Button -->
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center text-emerald-600 dark:text-emerald-400 transition py-1 px-3 rounded-2xl active:scale-95">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center text-sky-700 dark:text-sky-400 transition py-1 px-3 rounded-2xl active:scale-95">
                 <i data-lucide="layout-dashboard" class="w-7 h-7"></i>
                 <span class="text-xs font-bold mt-1">Home</span>
             </button>
 
             <!-- Centered Larger Add (+) Button -->
-            <button onclick="openTransactionModal('expense')" class="w-16 h-16 -mt-7 rounded-full bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white flex items-center justify-center shadow-xl shadow-emerald-500/40 hover:scale-105 active:scale-90 transition border-4 border-slate-50 dark:border-[#03120e]">
-                <i data-lucide="plus" class="w-8 h-8 stroke-[3]"></i>
+            <button onclick="openTransactionModal('expense')" class="w-14 h-14 -mt-6 rounded-full bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-sky-600/30 hover:scale-105 active:scale-90 transition border-4 border-slate-100 dark:border-[#0a1224]">
+                <i data-lucide="plus" class="w-7 h-7 stroke-[2.5]"></i>
             </button>
 
             <!-- Logs Button -->
-            <button onclick="switchTab('analytics')" id="nav-analytics" class="flex flex-col items-center text-slate-400 dark:text-emerald-700/60 hover:text-emerald-500 transition py-1 px-3 rounded-2xl active:scale-95">
+            <button onclick="switchTab('analytics')" id="nav-analytics" class="flex flex-col items-center text-slate-400 dark:text-sky-700/60 hover:text-sky-600 transition py-1 px-3 rounded-2xl active:scale-95">
                 <i data-lucide="receipt" class="w-7 h-7"></i>
                 <span class="text-xs font-bold mt-1">Logs</span>
             </button>
@@ -348,18 +347,18 @@
 
         <!-- MODAL 1: SET BUDGET MODAL -->
         <div id="budgetModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white dark:bg-[#071a14] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-emerald-500/20 dark:border-emerald-800/60">
+            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-sky-500/20 dark:border-sky-800/60">
                 <div class="flex justify-between items-center">
                     <h3 class="text-base font-black text-slate-900 dark:text-white">Set Monthly Budget (₱)</h3>
-                    <button onclick="closeBudgetModal()" class="p-1.5 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-slate-400">
+                    <button onclick="closeBudgetModal()" class="p-1.5 rounded-full hover:bg-sky-100 dark:hover:bg-sky-900/50 text-slate-400">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
                 <div>
-                    <label class="text-xs font-extrabold text-emerald-700 dark:text-emerald-300">Total Monthly Allocation</label>
-                    <input type="number" id="inputTotalBudget" placeholder="e.g. 40000" class="w-full mt-1.5 px-4 py-3 text-lg font-black rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-slate-900 dark:text-white border border-emerald-200 dark:border-emerald-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <label class="text-xs font-extrabold text-sky-700 dark:text-sky-300">Total Monthly Allocation</label>
+                    <input type="number" id="inputTotalBudget" placeholder="e.g. 40000" class="w-full mt-1.5 px-4 py-3 text-lg font-black rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                 </div>
-                <button onclick="saveTotalBudget()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 text-white font-black text-sm transition shadow-lg shadow-emerald-600/30 active:scale-95">
+                <button onclick="saveTotalBudget()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-700 via-sky-600 to-cyan-500 text-white font-black text-sm transition shadow-lg shadow-sky-600/30 active:scale-95">
                     Save Allocation
                 </button>
             </div>
@@ -367,32 +366,32 @@
 
         <!-- MODAL 2: DUAL ARCHIVE & RESET OPTIONS MODAL -->
         <div id="clearModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white dark:bg-[#071a14] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-5 border-t sm:border border-emerald-500/20 dark:border-emerald-800/60">
+            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-5 border-t sm:border border-sky-500/20 dark:border-sky-800/60">
                 <div class="flex justify-between items-center">
                     <h3 class="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <i data-lucide="archive" class="w-5 h-5 text-amber-500"></i>
                         Archive & Reset Options
                     </h3>
-                    <button onclick="closeClearModal()" class="p-1.5 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-slate-400">
+                    <button onclick="closeClearModal()" class="p-1.5 rounded-full hover:bg-sky-100 dark:hover:bg-sky-900/50 text-slate-400">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
                 
-                <p class="text-xs text-slate-600 dark:text-emerald-200/90 leading-relaxed">
-                    Choose whether you want to archive today's transactions or reset the entire monthly cycle:
+                <p class="text-xs text-slate-600 dark:text-sky-200/90 leading-relaxed">
+                    Choose whether you want to clear today's spending or reset the full monthly cycle:
                 </p>
 
                 <div class="space-y-3">
                     <!-- Option A: Archive & Reset Day -->
-                    <button onclick="confirmArchiveDay()" class="w-full p-4 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/70 hover:bg-emerald-500/20 border border-emerald-500/30 text-left transition active:scale-98 flex items-start justify-between group">
+                    <button onclick="confirmArchiveDay()" class="w-full p-4 rounded-2xl bg-sky-500/10 dark:bg-sky-950/70 hover:bg-sky-500/20 border border-sky-500/30 text-left transition active:scale-98 flex items-start justify-between group">
                         <div class="space-y-1">
                             <div class="flex items-center space-x-2">
-                                <i data-lucide="calendar" class="w-4 h-4 text-emerald-500"></i>
+                                <i data-lucide="calendar" class="w-4 h-4 text-sky-500"></i>
                                 <span class="text-xs font-black text-slate-900 dark:text-white">Archive & Reset Day</span>
                             </div>
-                            <p class="text-[11px] text-slate-500 dark:text-emerald-400/80">Archives today's transactions into logs with timestamp and clears today's spending view.</p>
+                            <p class="text-[11px] text-slate-500 dark:text-sky-400/80">Clears today's logs from active dashboard view while preserving them in Logs, weekly, and monthly totals.</p>
                         </div>
-                        <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-500 shrink-0 mt-1"></i>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-sky-500 shrink-0 mt-1"></i>
                     </button>
 
                     <!-- Option B: Archive & Reset Month -->
@@ -402,13 +401,13 @@
                                 <i data-lucide="calendar-range" class="w-4 h-4 text-amber-500"></i>
                                 <span class="text-xs font-black text-slate-900 dark:text-white">Archive & Reset Month</span>
                             </div>
-                            <p class="text-[11px] text-slate-500 dark:text-amber-300/80">Archives the entire current monthly budget cycle to logs and resets remaining budget to zero.</p>
+                            <p class="text-[11px] text-slate-500 dark:text-amber-300/80">Archives all current cycle logs, resets active spent balances to zero, and begins a fresh monthly period.</p>
                         </div>
                         <i data-lucide="chevron-right" class="w-5 h-5 text-amber-500 shrink-0 mt-1"></i>
                     </button>
                 </div>
 
-                <button onclick="closeClearModal()" class="w-full py-3 rounded-2xl bg-slate-100 dark:bg-emerald-950/60 text-slate-600 dark:text-emerald-400 font-bold text-xs border border-emerald-500/10">
+                <button onclick="closeClearModal()" class="w-full py-3 rounded-2xl bg-slate-100 dark:bg-sky-950/60 text-slate-600 dark:text-sky-400 font-bold text-xs border border-sky-500/10">
                     Cancel
                 </button>
             </div>
@@ -416,10 +415,10 @@
 
         <!-- MODAL 3: ADD TRANSACTION MODAL -->
         <div id="transactionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white dark:bg-[#071a14] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-emerald-500/20 dark:border-emerald-800/60">
+            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-sky-500/20 dark:border-sky-800/60">
                 <div class="flex justify-between items-center">
                     <h3 id="txModalTitle" class="text-base font-black text-slate-900 dark:text-white">Log Expense</h3>
-                    <button onclick="closeTransactionModal()" class="p-1.5 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-slate-400">
+                    <button onclick="closeTransactionModal()" class="p-1.5 rounded-full hover:bg-sky-100 dark:hover:bg-sky-900/50 text-slate-400">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
@@ -428,19 +427,19 @@
                     <input type="hidden" id="txType" value="expense">
                     
                     <div>
-                        <label class="text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300">Amount (₱)</label>
-                        <input type="number" step="0.01" id="txAmount" required placeholder="0.00" class="w-full mt-1 px-4 py-3 text-xl font-black rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-slate-900 dark:text-white border border-emerald-200 dark:border-emerald-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <label class="text-[11px] font-extrabold text-sky-700 dark:text-sky-300">Amount (₱)</label>
+                        <input type="number" step="0.01" id="txAmount" required placeholder="0.00" class="w-full mt-1 px-4 py-3 text-xl font-black rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
 
                     <div>
-                        <label class="text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300">Title / Merchant</label>
-                        <input type="text" id="txTitle" required placeholder="e.g. GCash, Meralco, Grab, Jollibee" class="w-full mt-1 px-3 py-2.5 text-sm font-semibold rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-slate-900 dark:text-white border border-emerald-200 dark:border-emerald-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <label class="text-[11px] font-extrabold text-sky-700 dark:text-sky-300">Title / Merchant</label>
+                        <input type="text" id="txTitle" required placeholder="e.g. GCash, Meralco, Grab, Jollibee" class="w-full mt-1 px-3 py-2.5 text-sm font-semibold rounded-xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300">Category</label>
-                            <select id="txCategory" class="w-full mt-1 px-3 py-2.5 text-xs font-semibold rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-slate-900 dark:text-white border border-emerald-200 dark:border-emerald-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <label class="text-[11px] font-extrabold text-sky-700 dark:text-sky-300">Category</label>
+                            <select id="txCategory" class="w-full mt-1 px-3 py-2.5 text-xs font-semibold rounded-xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                                 <option value="Food & Dining">Food & Dining</option>
                                 <option value="Utilities & Bills">Utilities & Bills</option>
                                 <option value="Transportation">Transportation</option>
@@ -450,19 +449,18 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300">Payment Method</label>
-                            <select id="txMethod" class="w-full mt-1 px-3 py-2.5 text-xs font-semibold rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-slate-900 dark:text-white border border-emerald-200 dark:border-emerald-800 focus:ring-2 focus:ring-emerald-500 outline-none">
-                                <option value="GCash">GCash</option>
-                                <option value="Maya">Maya</option>
-                                <option value="BPI">BPI Bank</option>
-                                <option value="BDO">BDO Bank</option>
+                            <label class="text-[11px] font-extrabold text-sky-700 dark:text-sky-300">Payment Method</label>
+                            <select id="txMethod" class="w-full mt-1 px-3 py-2.5 text-xs font-semibold rounded-xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                                 <option value="Cash">Cash</option>
+                                <option value="GCash">GCash</option>
+                                <option value="Online Bank">Online Bank</option>
+                                <option value="Debit Card">Debit Card</option>
                                 <option value="Credit Card">Credit Card</option>
                             </select>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-3.5 mt-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 text-white font-black text-sm transition shadow-lg shadow-emerald-600/30 active:scale-95">
+                    <button type="submit" class="w-full py-3.5 mt-2 rounded-2xl bg-gradient-to-r from-blue-700 via-sky-600 to-cyan-500 text-white font-black text-sm transition shadow-lg shadow-sky-600/30 active:scale-95">
                         Save Transaction
                     </button>
                 </form>
@@ -503,7 +501,7 @@
             }
         };
 
-        // Liquid Glass Background Animation (Emerald / Jade Theme)
+        // Eye-Friendly Subtle Ambient Canvas Background (Navy Blue & Sapphire Glow)
         function initLiquidCanvas() {
             const canvas = document.getElementById('liquidCanvas');
             if (!canvas) return;
@@ -518,35 +516,35 @@
 
             let step = 0;
             function animate() {
-                step += 0.015;
+                step += 0.01;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 const isDark = document.documentElement.classList.contains('dark');
                 
-                // Blob 1 (Rich Emerald Green)
+                // Navy Blue Ambient Gradient
                 const grad1 = ctx.createRadialGradient(
-                    canvas.width * 0.3 + Math.sin(step) * 40, 
-                    canvas.height * 0.4 + Math.cos(step * 0.8) * 20, 
+                    canvas.width * 0.3 + Math.sin(step) * 30, 
+                    canvas.height * 0.4 + Math.cos(step * 0.7) * 15, 
                     10, 
                     canvas.width * 0.3, 
                     canvas.height * 0.4, 
-                    canvas.width * 0.75
+                    canvas.width * 0.7
                 );
-                grad1.addColorStop(0, isDark ? 'rgba(16, 185, 129, 0.38)' : 'rgba(16, 185, 129, 0.28)');
+                grad1.addColorStop(0, isDark ? 'rgba(14, 165, 233, 0.2)' : 'rgba(2, 132, 199, 0.12)');
                 grad1.addColorStop(1, 'rgba(0,0,0,0)');
                 ctx.fillStyle = grad1;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Blob 2 (Mint / Teal Glow Highlight)
+                // Sapphire Highlight
                 const grad2 = ctx.createRadialGradient(
-                    canvas.width * 0.8 + Math.cos(step * 1.2) * 30, 
-                    canvas.height * 0.7 + Math.sin(step * 0.9) * 30, 
+                    canvas.width * 0.8 + Math.cos(step * 0.8) * 20, 
+                    canvas.height * 0.7 + Math.sin(step * 0.6) * 20, 
                     5, 
                     canvas.width * 0.7, 
                     canvas.height * 0.7, 
-                    canvas.width * 0.65
+                    canvas.width * 0.6
                 );
-                grad2.addColorStop(0, isDark ? 'rgba(52, 211, 153, 0.32)' : 'rgba(20, 184, 166, 0.25)');
+                grad2.addColorStop(0, isDark ? 'rgba(56, 189, 248, 0.15)' : 'rgba(14, 165, 233, 0.09)');
                 grad2.addColorStop(1, 'rgba(0,0,0,0)');
                 ctx.fillStyle = grad2;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -562,10 +560,10 @@
             const metaColor = document.getElementById('theme-color-meta');
             if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
-                metaColor.setAttribute('content', '#f0fdf4');
+                metaColor.setAttribute('content', '#eef2f7');
             } else {
                 html.classList.add('dark');
-                metaColor.setAttribute('content', '#020d09');
+                metaColor.setAttribute('content', '#060b17');
             }
             if (expenseChart) updateChartColors();
         }
@@ -577,8 +575,8 @@
                 const nav = document.getElementById(`nav-${t}`);
                 if (view) view.classList.add('hidden');
                 if (nav) {
-                    nav.classList.remove('text-emerald-600', 'dark:text-emerald-400');
-                    nav.classList.add('text-slate-400', 'dark:text-emerald-700/60');
+                    nav.classList.remove('text-sky-600', 'dark:text-sky-400');
+                    nav.classList.add('text-slate-400', 'dark:text-sky-700/60');
                 }
             });
 
@@ -586,16 +584,33 @@
             const targetNav = document.getElementById(`nav-${tabId}`);
             if (targetView) targetView.classList.remove('hidden');
             if (targetNav) {
-                targetNav.classList.add('text-emerald-600', 'dark:text-emerald-400');
-                targetNav.classList.remove('text-slate-400', 'dark:text-emerald-700/60');
+                targetNav.classList.add('text-sky-600', 'dark:text-sky-400');
+                targetNav.classList.remove('text-slate-400', 'dark:text-sky-700/60');
             }
 
             if (tabId === 'analytics') renderTransactions();
         }
 
+        // Helper: Helper for Weekly Start (Monday 00:00:00) and End (Sunday 23:59:59)
+        function getWeekRange(d) {
+            const date = new Date(d);
+            const day = date.getDay();
+            const diffToMon = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+            
+            const mon = new Date(date.setDate(diffToMon));
+            mon.setHours(0, 0, 0, 0);
+
+            const sun = new Date(mon);
+            sun.setDate(mon.getDate() + 6);
+            sun.setHours(23, 59, 59, 999);
+
+            return { start: mon, end: sun };
+        }
+
         // Render Dashboard Calculations (Filters for ACTIVE non-archived items)
         function renderDashboard() {
             const activeTx = appState.transactions.filter(t => !t.isArchived);
+            const allTx = appState.transactions; // Includes day-archived logs for week/month totals
 
             const totalSpent = activeTx
                 .filter(t => t.type === 'expense')
@@ -608,28 +623,36 @@
             const netBudget = appState.totalBudget + totalIncome;
             const remaining = netBudget - totalSpent;
 
-            // Calculate Periodic Totals (Today, This Week, This Month)
+            // Date calculations
             const now = new Date();
             const todayStr = now.toDateString();
 
-            // Calculate start of current week (Sunday)
-            const startOfWeek = new Date(now);
-            startOfWeek.setHours(0, 0, 0, 0);
-            startOfWeek.setDate(now.getDate() - now.getDay());
+            // Calculate start and end of Monday-Sunday week
+            const weekRange = getWeekRange(now);
 
-            // Calculate start of current month
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            // Calculate start (1st 00:00:00) and end of current month (30th/31st 23:59:59)
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
+            // Today's spending: active transactions only (resets when day is archived)
             const spentTodayVal = activeTx
                 .filter(t => t.type === 'expense' && new Date(t.date).toDateString() === todayStr)
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            const spentWeekVal = activeTx
-                .filter(t => t.type === 'expense' && new Date(t.date) >= startOfWeek)
+            // Weekly spending: all non-monthly-archived transactions recorded within Mon-Sun bounds
+            const spentWeekVal = allTx
+                .filter(t => {
+                    const txDate = new Date(t.date);
+                    return t.type === 'expense' && t.category !== 'Archive Summary' && txDate >= weekRange.start && txDate <= weekRange.end;
+                })
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            const spentMonthVal = activeTx
-                .filter(t => t.type === 'expense' && new Date(t.date) >= startOfMonth)
+            // Monthly spending: all non-monthly-archived transactions recorded within 1st to 30th/31st
+            const spentMonthVal = allTx
+                .filter(t => {
+                    const txDate = new Date(t.date);
+                    return t.type === 'expense' && t.category !== 'Archive Summary' && txDate >= startOfMonth && txDate <= endOfMonth;
+                })
                 .reduce((acc, t) => acc + t.amount, 0);
 
             // Update Periodic Displays
@@ -647,9 +670,8 @@
             document.getElementById('budgetProgressBar').style.width = `${percentSpent}%`;
 
             // Calculate Daily Recommended Allowance based on days remaining in month
-            const today = new Date();
-            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-            const daysRemaining = Math.max(1, daysInMonth - today.getDate() + 1);
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            const daysRemaining = Math.max(1, daysInMonth - now.getDate() + 1);
             const dailyAllowance = Math.max(0, remaining / daysRemaining);
 
             document.getElementById('displayDailyAllowance').innerText = `${formatPHP(dailyAllowance)} / day`;
@@ -659,7 +681,7 @@
             recentList.innerHTML = '';
             
             if (activeTx.length === 0) {
-                recentList.innerHTML = `<p class="text-center text-xs text-slate-400 py-4 font-semibold">No active spending yet for this cycle.</p>`;
+                recentList.innerHTML = `<p class="text-center text-xs text-slate-400 py-4 font-semibold">No active spending yet for today.</p>`;
             } else {
                 activeTx.slice(0, 4).forEach(tx => {
                     recentList.appendChild(createTransactionCard(tx));
@@ -670,34 +692,42 @@
             updateChartData();
         }
 
+        // Helper to Format Date with Exact Time (e.g., Oct 31, 2:35 PM)
+        function formatDateTime(dateString) {
+            const d = new Date(dateString);
+            const dateFormatted = d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric' });
+            const timeFormatted = d.toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit', hour12: true });
+            return `${dateFormatted}, ${timeFormatted}`;
+        }
+
         // Render Transaction Item HTML Component
         function createTransactionCard(tx) {
             const div = document.createElement('div');
-            div.className = `p-3.5 rounded-2xl liquid-glass-card flex items-center justify-between ${tx.isArchived ? 'opacity-85' : ''}`;
+            div.className = `p-3.5 rounded-2xl liquid-glass-card flex items-center justify-between ${tx.isArchived ? 'opacity-80' : ''}`;
 
             const isExpense = tx.type === 'expense';
             const iconName = tx.category === 'Archive Summary' ? 'archive' : getCategoryIcon(tx.category);
-            const formattedDate = new Date(tx.date).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+            const formattedTimeStr = formatDateTime(tx.date);
 
             div.innerHTML = `
                 <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-xl ${tx.category === 'Archive Summary' ? 'bg-amber-500/15 text-amber-500 border border-amber-500/20' : (isExpense ? 'bg-rose-500/15 text-rose-500 border border-rose-500/20' : 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/20')} flex items-center justify-center shrink-0">
-                        <i data-lucide="${iconName}" class="w-5 h-5"></i>
+                    <div class="w-10 h-10 rounded-xl ${tx.category === 'Archive Summary' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20' : (isExpense ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/15' : 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/15')} flex items-center justify-center shrink-0">
+                        <i data-lucide="${iconName}" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h4 class="text-xs font-black text-slate-900 dark:text-emerald-50">${tx.title}</h4>
-                        <div class="flex items-center space-x-2 text-[10px] text-slate-500 dark:text-emerald-400/80 mt-0.5 font-semibold">
-                            <span>${formattedDate}</span>
+                        <h4 class="text-xs font-bold text-slate-800 dark:text-sky-100">${tx.title}</h4>
+                        <div class="flex items-center space-x-2 text-[10px] text-slate-500 dark:text-sky-300/70 mt-0.5 font-medium">
+                            <span><i data-lucide="clock" class="inline w-3 h-3 -mt-0.5 mr-0.5 text-sky-500"></i>${formattedTimeStr}</span>
                             <span>•</span>
-                            <span class="px-1.5 py-0.5 rounded-md ${tx.isArchived ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/30' : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300/30 dark:border-emerald-700/40'} font-bold">${tx.method}</span>
+                            <span class="px-1.5 py-0.5 rounded-md ${tx.isArchived ? 'bg-amber-100/70 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300' : 'bg-sky-100/60 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300'} font-semibold">${tx.method}</span>
                         </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <span class="text-xs font-black ${isExpense ? 'text-slate-900 dark:text-white' : 'text-emerald-500'}">
+                    <span class="text-xs font-bold ${isExpense ? 'text-slate-800 dark:text-white' : 'text-sky-600 dark:text-sky-400'}">
                         ${isExpense ? '-' : '+'}${formatPHP(tx.amount)}
                     </span>
-                    <button onclick="deleteTransaction('${tx.id}')" class="block text-[10px] text-rose-400 hover:text-rose-600 ml-auto mt-1 font-semibold">Delete</button>
+                    <button onclick="deleteTransaction('${tx.id}')" class="block text-[10px] text-rose-400 hover:text-rose-600 ml-auto mt-1 font-medium">Delete</button>
                 </div>
             `;
             setTimeout(() => lucide.createIcons(), 0);
@@ -712,7 +742,7 @@
             container.innerHTML = '';
 
             const filtered = appState.transactions.filter(t => {
-                const dateFormatted = new Date(t.date).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase();
+                const dateFormatted = formatDateTime(t.date).toLowerCase();
                 const matchesSearch = t.title.toLowerCase().includes(query) || t.method.toLowerCase().includes(query) || dateFormatted.includes(query);
                 const matchesCategory = filter === 'ALL' || t.category === filter;
                 return matchesSearch && matchesCategory;
@@ -734,7 +764,7 @@
             document.getElementById('clearModal').classList.add('hidden');
         }
 
-        // FUNCTION 1: Archive & Reset Day
+        // FUNCTION 1: Archive & Reset Day (Clears Today's active view while retaining Weekly & Monthly totals)
         function confirmArchiveDay() {
             const todayStr = new Date().toDateString();
             const todayItems = appState.transactions.filter(t => !t.isArchived && new Date(t.date).toDateString() === todayStr);
@@ -749,9 +779,9 @@
                 .reduce((acc, t) => acc + t.amount, 0);
 
             const archiveDate = new Date();
-            const dateStr = archiveDate.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+            const formattedTimeStr = formatDateTime(archiveDate);
 
-            // Archive today's transactions
+            // Archive today's transactions from active view
             appState.transactions.forEach(t => {
                 if (!t.isArchived && new Date(t.date).toDateString() === todayStr) {
                     t.isArchived = true;
@@ -761,11 +791,11 @@
             // Add summary entry to Logs
             appState.transactions.unshift({
                 id: 'archive_day_' + Date.now(),
-                title: `Archived Daily Summary (${dateStr})`,
+                title: `Archived Daily Summary (${formattedTimeStr})`,
                 amount: daySpent,
                 type: 'expense',
                 category: 'Archive Summary',
-                method: 'Daily Archive',
+                method: 'Daily Reset',
                 isArchived: true,
                 date: archiveDate.toISOString()
             });
@@ -789,7 +819,7 @@
                 .reduce((acc, t) => acc + t.amount, 0);
 
             const archiveDate = new Date();
-            const dateStr = archiveDate.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+            const formattedTimeStr = formatDateTime(archiveDate);
 
             // Archive all active transactions
             appState.transactions.forEach(t => {
@@ -801,11 +831,11 @@
             // Add summary entry to Logs
             appState.transactions.unshift({
                 id: 'archive_month_' + Date.now(),
-                title: `Archived Monthly Summary (${dateStr})`,
+                title: `Archived Monthly Summary (${formattedTimeStr})`,
                 amount: totalSpentInCycle,
                 type: 'expense',
                 category: 'Archive Summary',
-                method: 'Monthly Archive',
+                method: 'Monthly Reset',
                 isArchived: true,
                 date: archiveDate.toISOString()
             });
@@ -883,7 +913,7 @@
         function updateChartColors() {
             if (!expenseChart) return;
             const isDark = document.documentElement.classList.contains('dark');
-            expenseChart.options.plugins.legend.labels.color = isDark ? '#34d399' : '#059669';
+            expenseChart.options.plugins.legend.labels.color = isDark ? '#bae6fd' : '#0369a1';
             expenseChart.update();
         }
 
@@ -944,7 +974,7 @@
                     labels: ['Food', 'Bills', 'Transport', 'Shopping', 'Savings'],
                     datasets: [{
                         data: [0, 0, 0, 0, 0],
-                        backgroundColor: ['#10b981', '#059669', '#34d399', '#f59e0b', '#06b6d4'],
+                        backgroundColor: ['#0284c7', '#0369a1', '#38bdf8', '#f59e0b', '#0ea5e9'],
                         borderWidth: 0
                     }]
                 },
@@ -955,13 +985,13 @@
                         legend: { 
                             position: 'bottom', 
                             labels: { 
-                                boxWidth: 10, 
-                                font: { size: 10, weight: 'bold' },
-                                color: isDark ? '#34d399' : '#059669'
+                                boxWidth: 8, 
+                                font: { size: 10, weight: '600' },
+                                color: isDark ? '#bae6fd' : '#0369a1'
                             } 
                         }
                     },
-                    cutout: '70%'
+                    cutout: '72%'
                 }
             });
         }
