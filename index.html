@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Pesomind - Premium PH Budget Tracker</title>
     
-    <!-- PWA Meta Tags for iOS -->
+    <!-- PWA Meta Tags for iOS Standalone PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Pesomind">
-    <meta name="theme-color" content="#060b17" id="theme-color-meta">
+    <meta name="theme-color" content="#0a1224" id="theme-color-meta">
 
     <!-- App Icon for iOS Home Screen & PWA -->
     <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='120' fill='%230a1224'/><radialGradient id='g' cx='50%' cy='50%' r='50%'><stop offset='0%' stop-color='%2338bdf8'/><stop offset='100%' stop-color='%231d4ed8'/></radialGradient><rect x='32' y='32' width='448' height='448' rx='96' fill='url(%23g)' opacity='0.15'/><circle cx='256' cy='256' r='180' fill='none' stroke='%2338bdf8' stroke-width='12' opacity='0.3'/><text x='256' y='330' font-family='-apple-system, sans-serif' font-weight='900' font-size='240' fill='%23ffffff' text-anchor='middle'>₱</text></svg>">
@@ -22,7 +22,7 @@
         %22start_url%22:%22.%22,
         %22display%22:%22standalone%22,
         %22background_color%22:%22%230a1224%22,
-        %22theme_color%22:%22%23060b17%22,
+        %22theme_color%22:%22%230a1224%22,
         %22icons%22:[{%22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%230a1224'/><text x='256' y='330' font-family='sans-serif' font-weight='900' font-size='240' fill='%2338bdf8' text-anchor='middle'>₱</text></svg>%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22}]
     }">
 
@@ -64,26 +64,26 @@
     <style>
         /* Eye-Friendly Glass Theme (Navy Blue & Slate Ambient) */
         .glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
         }
         .dark .glass {
-            background: rgba(10, 18, 36, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 18, 36, 0.92);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
         }
 
         /* Navy & Slate Glass Cards */
         .liquid-glass-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(240, 244, 249, 0.85));
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 244, 249, 0.88));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(14, 165, 233, 0.18);
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04), inset 0 1px 1px rgba(255, 255, 255, 1);
         }
         .dark .liquid-glass-card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(10, 18, 36, 0.9));
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.85), rgba(10, 18, 36, 0.95));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(56, 189, 248, 0.15);
@@ -97,8 +97,8 @@
             height: 0 !important;
         }
         * {
-            -ms-overflow-style: none !important; /* IE and Edge */
-            scrollbar-width: none !important;  /* Firefox */
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -109,7 +109,7 @@
             scrollbar-width: none;
         }
 
-        /* Dynamic Liquid Canvas - Soft Ambient Blend */
+        /* Dynamic Liquid Canvas */
         #liquidCanvas {
             position: absolute;
             top: 0;
@@ -122,30 +122,32 @@
             opacity: 0.75;
         }
         
-        /* Smooth transitions */
         * {
             -webkit-tap-highlight-color: transparent;
             transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease;
         }
 
-        /* Safe area padding for iPhone 15 notch/home bar */
-        .pb-safe {
-            padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        /* iOS Notch and Dynamic Island Safe Inset Paddings */
+        .pt-ios-header {
+            padding-top: calc(env(safe-area-inset-top, 20px) + 0.75rem);
         }
-        .pt-safe {
-            padding-top: max(1rem, env(safe-area-inset-top));
+        .pt-ios-content {
+            padding-top: calc(env(safe-area-inset-top, 20px) + 4.25rem);
+        }
+        .pb-ios-nav {
+            padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 20px));
         }
     </style>
 </head>
-<body class="bg-[#eef2f7] dark:bg-[#060b17] text-slate-700 dark:text-sky-100/90 min-h-screen font-sans selection:bg-sky-500 selection:text-white flex flex-col items-center justify-start pb-20">
+<body class="bg-[#eef2f7] dark:bg-[#060b17] text-slate-700 dark:text-sky-100/90 min-h-screen font-sans selection:bg-sky-500 selection:text-white flex flex-col items-center justify-start">
 
-    <!-- Container restricted to iPhone proportions on desktop, full-width on mobile -->
+    <!-- App Shell Container -->
     <div id="app" class="w-full max-w-md min-h-screen flex flex-col bg-[#f4f7fb] dark:bg-[#0a1224] shadow-2xl relative overflow-hidden border-x border-sky-500/10 dark:border-sky-950/60">
 
-        <!-- Top Header & Status Bar (Fixed on Top) -->
-        <header class="fixed top-0 left-0 right-0 max-w-md mx-auto z-50 glass border-b border-sky-500/10 dark:border-sky-900/30 px-5 pt-safe pb-3 flex justify-between items-center shadow-sm">
+        <!-- Top Header & Status Bar (Fixed on Top with Safe Area Inset) -->
+        <header class="fixed top-0 left-0 right-0 max-w-md mx-auto z-50 glass border-b border-sky-500/10 dark:border-sky-900/30 px-5 pt-ios-header pb-3 flex justify-between items-center shadow-sm">
             <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 flex items-center justify-center text-white font-black shadow-md shadow-sky-600/20">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 flex items-center justify-center text-white font-black shadow-md shadow-sky-600/20 shrink-0">
                     ₱
                 </div>
                 <div>
@@ -155,7 +157,7 @@
 
             <!-- Header Action Controls -->
             <div class="flex items-center space-x-2">
-                <!-- Dark Mode Toggle -->
+                <!-- Dark / Light Mode Toggle -->
                 <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-sky-100/60 dark:bg-sky-900/40 text-sky-800 dark:text-sky-300 hover:scale-105 active:scale-95 transition border border-sky-200/50 dark:border-sky-800/40">
                     <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-sky-300"></i>
                     <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-sky-800"></i>
@@ -163,8 +165,8 @@
             </div>
         </header>
 
-        <!-- Dynamic iOS PWA Installation Banner (Positioned under fixed header) -->
-        <div id="pwaBanner" class="hidden mt-[4.5rem] bg-slate-900 dark:bg-slate-950 text-slate-200 px-4 py-2.5 text-xs flex items-center justify-between border-b border-sky-500/20 backdrop-blur-md">
+        <!-- Dynamic iOS PWA Banner (Visible only on Web Browser, auto-hidden in PWA mode) -->
+        <div id="pwaBanner" class="hidden mt-16 bg-slate-900 dark:bg-slate-950 text-slate-200 px-4 py-2.5 text-xs flex items-center justify-between border-b border-sky-500/20 backdrop-blur-md">
             <div class="flex items-center space-x-2">
                 <i data-lucide="smartphone" class="w-4 h-4 text-sky-400 shrink-0"></i>
                 <span>Tap <strong>Share <i data-lucide="share" class="inline w-3 h-3"></i></strong> then <strong>'Add to Home Screen'</strong> for native app mode.</span>
@@ -174,8 +176,8 @@
             </button>
         </div>
 
-        <!-- MAIN SCROLLABLE CONTENT AREA (Padded at top to accommodate fixed header) -->
-        <main class="flex-1 overflow-y-auto no-scrollbar px-4 pt-20 pb-28 space-y-5">
+        <!-- MAIN SCROLLABLE CONTENT AREA -->
+        <main id="mainContainer" class="flex-1 overflow-y-auto no-scrollbar px-4 pt-ios-content pb-32 space-y-5">
 
             <!-- VIEW 1: DASHBOARD / BUDGET -->
             <section id="view-dashboard" class="space-y-4">
@@ -224,7 +226,7 @@
                     </div>
                 </div>
 
-                <!-- 2. QUICK ACTIONS SECTION (Shifted higher up for ergonomic tapping) -->
+                <!-- 2. QUICK ACTIONS SECTION -->
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="openTransactionModal('expense')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-rose-500/5 transition group active:scale-95">
                         <div class="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center transition shrink-0 border border-rose-500/20">
@@ -247,7 +249,7 @@
                     </button>
                 </div>
 
-                <!-- 3. PERIODIC SPENDING BREAKDOWN (Today / This Week / This Month) -->
+                <!-- 3. PERIODIC SPENDING BREAKDOWN -->
                 <div class="p-4 rounded-3xl liquid-glass-card space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-400 flex items-center gap-1.5 border-b border-slate-200/50 dark:border-sky-500/15 pb-2">
                         <i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i>
@@ -259,12 +261,12 @@
                             <span class="text-[10px] font-semibold text-slate-500 dark:text-sky-400/70 block">Today</span>
                             <span id="spentToday" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
                         </div>
-                        <!-- This Week (Mon 12AM - Sun 11:59PM) -->
+                        <!-- This Week -->
                         <div class="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/30 border border-sky-500/15 text-center">
                             <span class="text-[10px] font-semibold text-slate-500 dark:text-sky-400/70 block">This Week</span>
                             <span id="spentWeek" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
                         </div>
-                        <!-- This Month (1st - 30th/31st) -->
+                        <!-- This Month -->
                         <div class="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/30 border border-sky-500/15 text-center">
                             <span class="text-[10px] font-semibold text-slate-500 dark:text-sky-400/70 block">This Month</span>
                             <span id="spentMonth" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
@@ -341,28 +343,28 @@
         </main>
 
         <!-- BOTTOM iOS FLOATING GLASS NAVIGATION TAB BAR -->
-        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 glass border-t border-sky-500/10 dark:border-sky-900/40 px-8 py-3 flex justify-between items-center pb-safe">
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 glass border-t border-sky-500/10 dark:border-sky-900/40 px-8 py-2 flex justify-between items-center pb-ios-nav">
             <!-- Home Button -->
             <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center text-sky-700 dark:text-sky-400 transition py-1 px-3 rounded-2xl active:scale-95">
-                <i data-lucide="layout-dashboard" class="w-7 h-7"></i>
+                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
                 <span class="text-xs font-bold mt-1">Home</span>
             </button>
 
             <!-- Centered Larger Add (+) Button -->
-            <button onclick="openTransactionModal('expense')" class="w-14 h-14 -mt-6 rounded-full bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-sky-600/30 hover:scale-105 active:scale-90 transition border-4 border-slate-100 dark:border-[#0a1224]">
+            <button onclick="openTransactionModal('expense')" class="w-14 h-14 -mt-5 rounded-full bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-sky-600/30 hover:scale-105 active:scale-90 transition border-4 border-slate-100 dark:border-[#0a1224]">
                 <i data-lucide="plus" class="w-7 h-7 stroke-[2.5]"></i>
             </button>
 
             <!-- Logs Button -->
             <button onclick="switchTab('analytics')" id="nav-analytics" class="flex flex-col items-center text-slate-400 dark:text-sky-700/60 hover:text-sky-600 transition py-1 px-3 rounded-2xl active:scale-95">
-                <i data-lucide="receipt" class="w-7 h-7"></i>
+                <i data-lucide="receipt" class="w-6 h-6"></i>
                 <span class="text-xs font-bold mt-1">Logs</span>
             </button>
         </nav>
 
         <!-- MODAL 1: SET BUDGET MODAL -->
         <div id="budgetModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-sky-500/20 dark:border-sky-800/60">
+            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-sky-500/20 dark:border-sky-800/60 pb-ios-nav">
                 <div class="flex justify-between items-center">
                     <h3 class="text-base font-black text-slate-900 dark:text-white">Set Monthly Budget (₱)</h3>
                     <button onclick="closeBudgetModal()" class="p-1.5 rounded-full hover:bg-sky-100 dark:hover:bg-sky-900/50 text-slate-400">
@@ -381,7 +383,7 @@
 
         <!-- MODAL 2: DUAL ARCHIVE & RESET OPTIONS MODAL -->
         <div id="clearModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-5 border-t sm:border border-sky-500/20 dark:border-sky-800/60">
+            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-5 border-t sm:border border-sky-500/20 dark:border-sky-800/60 pb-ios-nav">
                 <div class="flex justify-between items-center">
                     <h3 class="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <i data-lucide="archive" class="w-5 h-5 text-amber-500"></i>
@@ -430,7 +432,7 @@
 
         <!-- MODAL 3: ADD TRANSACTION MODAL -->
         <div id="transactionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-sky-500/20 dark:border-sky-800/60">
+            <div class="bg-white dark:bg-[#0c1830] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 border-t sm:border border-sky-500/20 dark:border-sky-800/60 pb-ios-nav">
                 <div class="flex justify-between items-center">
                     <h3 id="txModalTitle" class="text-base font-black text-slate-900 dark:text-white">Log Expense</h3>
                     <button onclick="closeTransactionModal()" class="p-1.5 rounded-full hover:bg-sky-100 dark:hover:bg-sky-900/50 text-slate-400">
@@ -486,22 +488,18 @@
 
     <!-- APPLICATION JAVASCRIPT -->
     <script>
-        // State Initialization with local storage fallback
         let appState = {
-            totalBudget: parseFloat(localStorage.getItem('pesomind_budget')) || 40000,
-            challengeSaved: parseFloat(localStorage.getItem('pesomind_challenge')) || 12000,
+            totalBudget: parseFloat(localStorage.getItem('pesomind_budget')) || 65000,
             transactions: JSON.parse(localStorage.getItem('pesomind_transactions')) || [
                 { id: '1', title: 'GCash - Meralco Bill', amount: 4500, type: 'expense', category: 'Utilities & Bills', method: 'GCash', isArchived: false, date: new Date().toISOString() },
                 { id: '2', title: 'Jollibee Family Meal', amount: 850, type: 'expense', category: 'Food & Dining', method: 'Cash', isArchived: false, date: new Date().toISOString() },
-                { id: '3', title: 'Grab Car to Office', amount: 420, type: 'expense', category: 'Transportation', method: 'Maya', isArchived: false, date: new Date().toISOString() },
-                { id: '4', title: 'PAG-IBIG MP2 Deposit', amount: 5000, type: 'expense', category: 'Savings & Investments', method: 'BPI', isArchived: false, date: new Date().toISOString() },
-                { id: '5', title: 'Bi-Weekly Salary Input', amount: 25000, type: 'income', category: 'Income', method: 'BPI', isArchived: false, date: new Date().toISOString() }
+                { id: '3', title: 'Grab Car to Office', amount: 420, type: 'expense', category: 'Transportation', method: 'Debit Card', isArchived: false, date: new Date().toISOString() },
+                { id: '4', title: 'PAG-IBIG MP2 Deposit', amount: 5000, type: 'expense', category: 'Savings & Investments', method: 'Online Bank', isArchived: false, date: new Date().toISOString() }
             ]
         };
 
         let expenseChart = null;
 
-        // Load Saved Theme Setting on Startup
         function initSavedTheme() {
             const savedTheme = localStorage.getItem('pesomind_theme');
             const metaColor = document.getElementById('theme-color-meta');
@@ -510,13 +508,11 @@
                 document.documentElement.classList.remove('dark');
                 if (metaColor) metaColor.setAttribute('content', '#eef2f7');
             } else {
-                // Default to dark mode
                 document.documentElement.classList.add('dark');
-                if (metaColor) metaColor.setAttribute('content', '#060b17');
+                if (metaColor) metaColor.setAttribute('content', '#0a1224');
             }
         }
 
-        // On Page Load
         window.onload = function() {
             initSavedTheme();
             lucide.createIcons();
@@ -524,15 +520,14 @@
             renderDashboard();
             initLiquidCanvas();
             
-            // Check iOS Standalone mode
-            if (window.navigator.standalone) {
+            // Check iOS Standalone PWA mode
+            if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
                 document.getElementById('pwaBanner').classList.add('hidden');
             } else {
                 document.getElementById('pwaBanner').classList.remove('hidden');
             }
         };
 
-        // Eye-Friendly Ambient Canvas Animation (Navy Blue & Sapphire Glow)
         function initLiquidCanvas() {
             const canvas = document.getElementById('liquidCanvas');
             if (!canvas) return;
@@ -579,7 +574,6 @@
             animate();
         }
 
-        // Dark / Light Mode Toggle with Persistence
         function toggleDarkMode() {
             const html = document.documentElement;
             const metaColor = document.getElementById('theme-color-meta');
@@ -589,13 +583,12 @@
                 localStorage.setItem('pesomind_theme', 'light');
             } else {
                 html.classList.add('dark');
-                metaColor.setAttribute('content', '#060b17');
+                metaColor.setAttribute('content', '#0a1224');
                 localStorage.setItem('pesomind_theme', 'dark');
             }
             if (expenseChart) updateChartColors();
         }
 
-        // Navigation Switcher
         function switchTab(tabId) {
             ['dashboard', 'analytics'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
@@ -618,11 +611,10 @@
             if (tabId === 'analytics') renderTransactions();
         }
 
-        // Helper: Helper for Weekly Start (Monday 00:00:00) and End (Sunday 23:59:59)
         function getWeekRange(d) {
             const date = new Date(d);
             const day = date.getDay();
-            const diffToMon = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+            const diffToMon = date.getDate() - day + (day === 0 ? -6 : 1);
             
             const mon = new Date(date.setDate(diffToMon));
             mon.setHours(0, 0, 0, 0);
@@ -634,10 +626,9 @@
             return { start: mon, end: sun };
         }
 
-        // Render Dashboard Calculations (Filters for ACTIVE non-archived items)
         function renderDashboard() {
             const activeTx = appState.transactions.filter(t => !t.isArchived);
-            const allTx = appState.transactions; // Includes archived logs for week/month totals
+            const allTx = appState.transactions;
 
             const totalSpent = activeTx
                 .filter(t => t.type === 'expense')
@@ -650,23 +641,16 @@
             const netBudget = appState.totalBudget + totalIncome;
             const remaining = netBudget - totalSpent;
 
-            // Date calculations
             const now = new Date();
             const todayStr = now.toDateString();
-
-            // Calculate start and end of Monday-Sunday week
             const weekRange = getWeekRange(now);
-
-            // Calculate start (1st 00:00:00) and end of current month (30th/31st 23:59:59)
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
             const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
-            // Today's spending: active transactions only (resets when day is archived)
             const spentTodayVal = activeTx
                 .filter(t => t.type === 'expense' && new Date(t.date).toDateString() === todayStr)
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            // Weekly spending: all transactions recorded within Mon-Sun bounds
             const spentWeekVal = allTx
                 .filter(t => {
                     const txDate = new Date(t.date);
@@ -674,7 +658,6 @@
                 })
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            // Monthly spending: ALL expenses logged from the 1st of this month to month end
             const spentMonthVal = allTx
                 .filter(t => {
                     const txDate = new Date(t.date);
@@ -682,28 +665,23 @@
                 })
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            // Update Periodic Displays
             document.getElementById('spentToday').innerText = formatPHP(spentTodayVal, true);
             document.getElementById('spentWeek').innerText = formatPHP(spentWeekVal, true);
             document.getElementById('spentMonth').innerText = formatPHP(spentMonthVal, true);
 
-            // Update UI elements
             document.getElementById('displayRemaining').innerText = formatPHP(remaining);
             document.getElementById('displaySpent').innerText = formatPHP(totalSpent);
             document.getElementById('displayTotalBudget').innerText = formatPHP(netBudget);
 
-            // Calculate progress bar
             const percentSpent = Math.min(100, Math.max(0, (totalSpent / (netBudget || 1)) * 100));
             document.getElementById('budgetProgressBar').style.width = `${percentSpent}%`;
 
-            // Calculate Daily Recommended Allowance based on days remaining in month
             const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
             const daysRemaining = Math.max(1, daysInMonth - now.getDate() + 1);
             const dailyAllowance = Math.max(0, remaining / daysRemaining);
 
             document.getElementById('displayDailyAllowance').innerText = `${formatPHP(dailyAllowance)} / day`;
 
-            // Render Recent Active Transactions (Top 4)
             const recentList = document.getElementById('recentTransactionsList');
             recentList.innerHTML = '';
             
@@ -715,11 +693,9 @@
                 });
             }
 
-            // Update Chart Data
             updateChartData();
         }
 
-        // Helper to Format Date with Exact Time (e.g., Oct 31, 2:35 PM)
         function formatDateTime(dateString) {
             const d = new Date(dateString);
             const dateFormatted = d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric' });
@@ -727,7 +703,6 @@
             return `${dateFormatted}, ${timeFormatted}`;
         }
 
-        // Render Transaction Item HTML Component
         function createTransactionCard(tx) {
             const div = document.createElement('div');
             div.className = `p-3.5 rounded-2xl liquid-glass-card flex items-center justify-between ${tx.isArchived ? 'opacity-80' : ''}`;
@@ -761,7 +736,6 @@
             return div;
         }
 
-        // Render Detailed Transactions List with Search & Filters
         function renderTransactions() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filter = document.getElementById('categoryFilter').value;
@@ -783,7 +757,6 @@
             filtered.forEach(tx => container.appendChild(createTransactionCard(tx)));
         }
 
-        // Modal triggers
         function openArchiveOptionsModal() {
             document.getElementById('clearModal').classList.remove('hidden');
         }
@@ -791,7 +764,6 @@
             document.getElementById('clearModal').classList.add('hidden');
         }
 
-        // FUNCTION 1: Archive & Reset Day (Clears Today's active view while retaining Weekly & Monthly totals)
         function confirmArchiveDay() {
             const todayStr = new Date().toDateString();
             const todayItems = appState.transactions.filter(t => !t.isArchived && new Date(t.date).toDateString() === todayStr);
@@ -808,14 +780,12 @@
             const archiveDate = new Date();
             const formattedTimeStr = formatDateTime(archiveDate);
 
-            // Archive today's transactions from active view
             appState.transactions.forEach(t => {
                 if (!t.isArchived && new Date(t.date).toDateString() === todayStr) {
                     t.isArchived = true;
                 }
             });
 
-            // Add summary entry to Logs
             appState.transactions.unshift({
                 id: 'archive_day_' + Date.now(),
                 title: `Archived Daily Summary (${formattedTimeStr})`,
@@ -833,7 +803,6 @@
             switchTab('analytics');
         }
 
-        // FUNCTION 2: Archive & Reset Month
         function confirmArchiveMonth() {
             const activeItems = appState.transactions.filter(t => !t.isArchived);
             if (activeItems.length === 0) {
@@ -848,14 +817,12 @@
             const archiveDate = new Date();
             const formattedTimeStr = formatDateTime(archiveDate);
 
-            // Archive all active transactions
             appState.transactions.forEach(t => {
                 if (!t.isArchived) {
                     t.isArchived = true;
                 }
             });
 
-            // Add summary entry to Logs
             appState.transactions.unshift({
                 id: 'archive_month_' + Date.now(),
                 title: `Archived Monthly Summary (${formattedTimeStr})`,
@@ -873,7 +840,6 @@
             switchTab('analytics');
         }
 
-        // Add Transaction Handler
         function handleSaveTransaction(e) {
             e.preventDefault();
             const type = document.getElementById('txType').value;
@@ -910,14 +876,11 @@
             }
         }
 
-        // Save State to Local Storage
         function saveState() {
             localStorage.setItem('pesomind_budget', appState.totalBudget);
-            localStorage.setItem('pesomind_challenge', appState.challengeSaved);
             localStorage.setItem('pesomind_transactions', JSON.stringify(appState.transactions));
         }
 
-        // Helper: Formatting PHP Currency
         function formatPHP(amount, compact = false) {
             if (compact && amount >= 1000) {
                 return '₱' + (amount / 1000).toFixed(1) + 'k';
@@ -936,7 +899,6 @@
             }
         }
 
-        // Update chart text color when switching themes
         function updateChartColors() {
             if (!expenseChart) return;
             const isDark = document.documentElement.classList.contains('dark');
@@ -944,7 +906,6 @@
             expenseChart.update();
         }
 
-        // Modal Handlers & Controls
         function closePwaBanner() {
             document.getElementById('pwaBanner').classList.add('hidden');
         }
@@ -980,7 +941,6 @@
             document.getElementById('transactionModal').classList.add('hidden');
         }
 
-        // Export Data Feature
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
             const dlAnchorElem = document.createElement('a');
@@ -991,7 +951,6 @@
             dlAnchorElem.remove();
         }
 
-        // Chart Initialization
         function initChart() {
             const ctx = document.getElementById('expenseChart').getContext('2d');
             const isDark = document.documentElement.classList.contains('dark');
