@@ -139,13 +139,13 @@
         }
     </style>
 </head>
-<body class="bg-[#eef2f7] dark:bg-[#060b17] text-slate-700 dark:text-sky-100/90 min-h-screen font-sans selection:bg-sky-500 selection:text-white flex flex-col items-center justify-start">
+<body class="bg-[#eef2f7] dark:bg-[#0a1224] text-slate-700 dark:text-sky-100/90 min-h-screen font-sans selection:bg-sky-500 selection:text-white flex flex-col items-center justify-start">
 
     <!-- App Shell Container -->
-    <div id="app" class="w-full max-w-md min-h-screen flex flex-col bg-[#f4f7fb] dark:bg-[#0a1224] shadow-2xl relative overflow-hidden border-x border-sky-500/10 dark:border-sky-950/60">
+    <div id="app" class="w-full max-w-md min-h-screen flex flex-col bg-[#eef2f7] dark:bg-[#0a1224] shadow-2xl relative overflow-hidden border-x border-sky-500/10 dark:border-sky-950/60">
 
-        <!-- Top Header & Status Bar (Fixed on Top with Safe Area Inset) -->
-        <header class="fixed top-0 left-0 right-0 max-w-md mx-auto z-50 glass border-b border-sky-500/10 dark:border-sky-900/30 px-5 pt-ios-header pb-3 flex justify-between items-center shadow-sm">
+        <!-- Top Header & Status Bar (Fixed on Top with Safe Area Inset & Matching Background) -->
+        <header class="fixed top-0 left-0 right-0 max-w-md mx-auto z-50 bg-[#eef2f7]/95 dark:bg-[#0a1224]/95 backdrop-blur-xl border-b border-sky-500/10 dark:border-sky-900/30 px-5 pt-ios-header pb-3 flex justify-between items-center shadow-sm">
             <div class="flex items-center space-x-2.5">
                 <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-700 via-sky-600 to-cyan-500 flex items-center justify-center text-white font-black shadow-md shadow-sky-600/20 shrink-0">
                     ₱
@@ -639,7 +639,7 @@
                 .reduce((acc, t) => acc + t.amount, 0);
 
             const netBudget = appState.totalBudget + totalIncome;
-            const remaining = netBudget - totalSpent;
+            const remaining = Math.max(0, netBudget - totalSpent);
 
             const now = new Date();
             const todayStr = now.toDateString();
@@ -777,6 +777,13 @@
                 .filter(t => t.type === 'expense')
                 .reduce((acc, t) => acc + t.amount, 0);
 
+            const dayIncome = todayItems
+                .filter(t => t.type === 'income')
+                .reduce((acc, t) => acc + t.amount, 0);
+
+            // Deduct net spent today from total budget pool so remaining balance reflects subtraction
+            appState.totalBudget = Math.max(0, appState.totalBudget - (daySpent - dayIncome));
+
             const archiveDate = new Date();
             const formattedTimeStr = formatDateTime(archiveDate);
 
@@ -805,11 +812,7 @@
 
         function confirmArchiveMonth() {
             const activeItems = appState.transactions.filter(t => !t.isArchived);
-            if (activeItems.length === 0) {
-                closeClearModal();
-                return;
-            }
-
+            
             const totalSpentInCycle = activeItems
                 .filter(t => t.type === 'expense')
                 .reduce((acc, t) => acc + t.amount, 0);
@@ -823,16 +826,21 @@
                 }
             });
 
-            appState.transactions.unshift({
-                id: 'archive_month_' + Date.now(),
-                title: `Archived Monthly Summary (${formattedTimeStr})`,
-                amount: totalSpentInCycle,
-                type: 'expense',
-                category: 'Archive Summary',
-                method: 'Monthly Reset',
-                isArchived: true,
-                date: archiveDate.toISOString()
-            });
+            if (totalSpentInCycle > 0) {
+                appState.transactions.unshift({
+                    id: 'archive_month_' + Date.now(),
+                    title: `Archived Monthly Summary (${formattedTimeStr})`,
+                    amount: totalSpentInCycle,
+                    type: 'expense',
+                    category: 'Archive Summary',
+                    method: 'Monthly Reset',
+                    isArchived: true,
+                    date: archiveDate.toISOString()
+                });
+            }
+
+            // Reset total budget to 0 so Remaining Balance becomes 0
+            appState.totalBudget = 0;
 
             saveState();
             closeClearModal();
