@@ -175,7 +175,7 @@
         </div>
 
         <!-- MAIN SCROLLABLE CONTENT AREA (Padded at top to accommodate fixed header) -->
-        <main class="flex-1 overflow-y-auto no-scrollbar px-4 pt-24 pb-40 space-y-5">
+        <main class="flex-1 overflow-y-auto no-scrollbar px-4 pt-20 pb-28 space-y-5">
 
             <!-- VIEW 1: DASHBOARD / BUDGET -->
             <section id="view-dashboard" class="space-y-4">
@@ -224,7 +224,30 @@
                     </div>
                 </div>
 
-                <!-- 2. PERIODIC SPENDING BREAKDOWN (Today / This Week / This Month) -->
+                <!-- 2. QUICK ACTIONS SECTION (Shifted higher up for ergonomic tapping) -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="openTransactionModal('expense')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-rose-500/5 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center transition shrink-0 border border-rose-500/20">
+                            <i data-lucide="minus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-xs font-bold text-slate-800 dark:text-white block">Log Expense</span>
+                            <span class="text-[10px] font-medium text-slate-500 dark:text-sky-400/70">Add spending</span>
+                        </div>
+                    </button>
+
+                    <button onclick="openTransactionModal('income')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-sky-500/5 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center transition shrink-0 border border-sky-500/20">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-xs font-bold text-slate-800 dark:text-white block">Add Income</span>
+                            <span class="text-[10px] font-medium text-slate-500 dark:text-sky-400/70">Add salary/cash</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- 3. PERIODIC SPENDING BREAKDOWN (Today / This Week / This Month) -->
                 <div class="p-4 rounded-3xl liquid-glass-card space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-400 flex items-center gap-1.5 border-b border-slate-200/50 dark:border-sky-500/15 pb-2">
                         <i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i>
@@ -247,29 +270,6 @@
                             <span id="spentMonth" class="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5 block">₱0.00</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- 3. QUICK ACTIONS SECTION -->
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="openTransactionModal('expense')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-rose-500/5 transition group active:scale-95">
-                        <div class="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center transition shrink-0 border border-rose-500/20">
-                            <i data-lucide="minus-circle" class="w-5 h-5"></i>
-                        </div>
-                        <div class="text-left">
-                            <span class="text-xs font-bold text-slate-800 dark:text-white block">Log Expense</span>
-                            <span class="text-[10px] font-medium text-slate-500 dark:text-sky-400/70">Add spending</span>
-                        </div>
-                    </button>
-
-                    <button onclick="openTransactionModal('income')" class="flex items-center space-x-3 p-4 rounded-2xl liquid-glass-card hover:bg-sky-500/5 transition group active:scale-95">
-                        <div class="w-11 h-11 rounded-2xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center transition shrink-0 border border-sky-500/20">
-                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                        </div>
-                        <div class="text-left">
-                            <span class="text-xs font-bold text-slate-800 dark:text-white block">Add Income</span>
-                            <span class="text-[10px] font-medium text-slate-500 dark:text-sky-400/70">Add salary/cash</span>
-                        </div>
-                    </button>
                 </div>
 
                 <!-- 4. SPENDING DISTRIBUTION SECTION -->
@@ -371,7 +371,7 @@
                 </div>
                 <div>
                     <label class="text-xs font-extrabold text-sky-700 dark:text-sky-300">Total Monthly Allocation</label>
-                    <input type="number" id="inputTotalBudget" placeholder="e.g. 40000" class="w-full mt-1.5 px-4 py-3 text-lg font-black rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="inputTotalBudget" placeholder="e.g. 40000" class="w-full mt-1.5 px-4 py-3 text-lg font-black rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                 </div>
                 <button onclick="saveTotalBudget()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-700 via-sky-600 to-cyan-500 text-white font-black text-sm transition shadow-lg shadow-sky-600/30 active:scale-95">
                     Save Allocation
@@ -443,7 +443,7 @@
                     
                     <div>
                         <label class="text-[11px] font-extrabold text-sky-700 dark:text-sky-300">Amount (₱)</label>
-                        <input type="number" step="0.01" id="txAmount" required placeholder="0.00" class="w-full mt-1 px-4 py-3 text-xl font-black rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                        <input type="number" step="0.01" inputmode="decimal" pattern="[0-9]*" id="txAmount" required placeholder="0.00" class="w-full mt-1 px-4 py-3 text-xl font-black rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-slate-900 dark:text-white border border-sky-200 dark:border-sky-800 focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
 
                     <div>
@@ -501,8 +501,24 @@
 
         let expenseChart = null;
 
+        // Load Saved Theme Setting on Startup
+        function initSavedTheme() {
+            const savedTheme = localStorage.getItem('pesomind_theme');
+            const metaColor = document.getElementById('theme-color-meta');
+            
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                if (metaColor) metaColor.setAttribute('content', '#eef2f7');
+            } else {
+                // Default to dark mode
+                document.documentElement.classList.add('dark');
+                if (metaColor) metaColor.setAttribute('content', '#060b17');
+            }
+        }
+
         // On Page Load
         window.onload = function() {
+            initSavedTheme();
             lucide.createIcons();
             initChart();
             renderDashboard();
@@ -516,69 +532,65 @@
             }
         };
 
-        // Eye-Friendly Subtle Ambient Canvas Background (Navy Blue & Sapphire Glow)
+        // Eye-Friendly Ambient Canvas Animation (Navy Blue & Sapphire Glow)
         function initLiquidCanvas() {
             const canvas = document.getElementById('liquidCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             
             function resize() {
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
+                if (canvas.parentElement) {
+                    canvas.width = canvas.parentElement.offsetWidth;
+                    canvas.height = canvas.parentElement.offsetHeight;
+                }
             }
             resize();
             window.addEventListener('resize', resize);
 
-            let step = 0;
+            let time = 0;
             function animate() {
-                step += 0.01;
+                time += 0.015;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 const isDark = document.documentElement.classList.contains('dark');
-                
-                // Navy Blue Ambient Gradient
-                const grad1 = ctx.createRadialGradient(
-                    canvas.width * 0.3 + Math.sin(step) * 30, 
-                    canvas.height * 0.4 + Math.cos(step * 0.7) * 15, 
+                const g1 = ctx.createRadialGradient(
+                    canvas.width * (0.3 + 0.2 * Math.sin(time)), 
+                    canvas.height * (0.4 + 0.2 * Math.cos(time)), 
                     10, 
-                    canvas.width * 0.3, 
-                    canvas.height * 0.4, 
-                    canvas.width * 0.7
+                    canvas.width * 0.5, 
+                    canvas.height * 0.5, 
+                    canvas.width * 0.8
                 );
-                grad1.addColorStop(0, isDark ? 'rgba(14, 165, 233, 0.2)' : 'rgba(2, 132, 199, 0.12)');
-                grad1.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = grad1;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Sapphire Highlight
-                const grad2 = ctx.createRadialGradient(
-                    canvas.width * 0.8 + Math.cos(step * 0.8) * 20, 
-                    canvas.height * 0.7 + Math.sin(step * 0.6) * 20, 
-                    5, 
-                    canvas.width * 0.7, 
-                    canvas.height * 0.7, 
-                    canvas.width * 0.6
-                );
-                grad2.addColorStop(0, isDark ? 'rgba(56, 189, 248, 0.15)' : 'rgba(14, 165, 233, 0.09)');
-                grad2.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = grad2;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                if (isDark) {
+                    g1.addColorStop(0, 'rgba(56, 189, 248, 0.15)');
+                    g1.addColorStop(0.5, 'rgba(14, 165, 233, 0.08)');
+                    g1.addColorStop(1, 'rgba(10, 18, 36, 0)');
+                } else {
+                    g1.addColorStop(0, 'rgba(2, 132, 199, 0.1)');
+                    g1.addColorStop(0.5, 'rgba(56, 189, 248, 0.05)');
+                    g1.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                }
 
+                ctx.fillStyle = g1;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
                 requestAnimationFrame(animate);
             }
             animate();
         }
 
-        // Dark / Light Mode Toggle
+        // Dark / Light Mode Toggle with Persistence
         function toggleDarkMode() {
             const html = document.documentElement;
             const metaColor = document.getElementById('theme-color-meta');
             if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
                 metaColor.setAttribute('content', '#eef2f7');
+                localStorage.setItem('pesomind_theme', 'light');
             } else {
                 html.classList.add('dark');
                 metaColor.setAttribute('content', '#060b17');
+                localStorage.setItem('pesomind_theme', 'dark');
             }
             if (expenseChart) updateChartColors();
         }
@@ -625,7 +637,7 @@
         // Render Dashboard Calculations (Filters for ACTIVE non-archived items)
         function renderDashboard() {
             const activeTx = appState.transactions.filter(t => !t.isArchived);
-            const allTx = appState.transactions; // Includes day-archived logs for week/month totals
+            const allTx = appState.transactions; // Includes archived logs for week/month totals
 
             const totalSpent = activeTx
                 .filter(t => t.type === 'expense')
@@ -654,7 +666,7 @@
                 .filter(t => t.type === 'expense' && new Date(t.date).toDateString() === todayStr)
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            // Weekly spending: all non-monthly-archived transactions recorded within Mon-Sun bounds
+            // Weekly spending: all transactions recorded within Mon-Sun bounds
             const spentWeekVal = allTx
                 .filter(t => {
                     const txDate = new Date(t.date);
@@ -662,7 +674,7 @@
                 })
                 .reduce((acc, t) => acc + t.amount, 0);
 
-            // Monthly spending: all non-monthly-archived transactions recorded within 1st to 30th/31st
+            // Monthly spending: ALL expenses logged from the 1st of this month to month end
             const spentMonthVal = allTx
                 .filter(t => {
                     const txDate = new Date(t.date);
